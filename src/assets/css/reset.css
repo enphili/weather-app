@@ -19,6 +19,7 @@ footer, header, nav, section, main {
 
 body {
   line-height: 1;
+  background-color: dimgray;
 }
 
 ol, ul {
@@ -43,4 +44,23 @@ input {
   border-radius: 0;
 }
 
-/*# sourceMappingURL=style.css.map */
+@font-face {
+  font-family: "Roboto";
+  src: local("Roboto"), url("../font/Roboto.woff") format("woff"), url("../font/Roboto.woff2") format("woff2");
+  font-display: auto;
+  font-weight: normal;
+}
+@font-face {
+  font-family: "Roboto";
+  src: local("Roboto"), url("../font/Robotobold.woff") format("woff"), url("../font/Robotobold.woff2") format("woff2");
+  font-display: auto;
+  font-weight: bold;
+}
+@font-face {
+  font-family: "Roboto";
+  src: local("Roboto"), url("../font/Robotolight.woff") format("woff"), url("../font/Robotolight.woff2") format("woff2");
+  font-display: auto;
+  font-weight: 300;
+}
+
+/*# sourceMappingURL=reset.css.map */
