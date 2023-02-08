@@ -31,11 +31,11 @@
     flex-direction: column
     justify-content: space-between
     align-items: center
-    height: 56px
     padding: 9px 0
     border: none
     font-size: 12px
     color: rgba(0,0,0,0.75)
+    background-color: #f1f5f6
     overflow: hidden
     cursor: pointer
     & svg

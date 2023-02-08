@@ -13,7 +13,6 @@ import FooterNav from './components/FooterNav.vue'
 import MainContent from './components/MainContent.vue'
 import backgroundUrl from './assets/img/clear_night.webp'
 
-
 </script>
 
 <style scoped lang="sass">
@@ -21,7 +20,8 @@ import backgroundUrl from './assets/img/clear_night.webp'
   display: flex
   justify-content: space-between
   flex-direction: column
-  height: 100vh
+  min-height: 100vh
+  min-height: var(--vh)
   background-position: center
   background-size: cover
   font-family: "Roboto", sans-serif

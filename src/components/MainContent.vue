@@ -1,14 +1,22 @@
 <template>
   <div class="weather-app__main-content main-content">
-    <div class="main-content__temperature-wrapper temperature-wrapper">
-      <span class="main-content__today-temperature today-temperature">{{ '-13' }}&deg;</span>
-      <i class="wi wi-night-sleet single-location__weather-icon weather-icon"></i>
+    <div class="main-content__present-weather present-weather">
+      <div class="main-content__temperature-wrapper temperature-wrapper">
+        <span class="main-content__today-temperature today-temperature">{{ '-13' }}&deg;</span>
+        <i class="wi wi-night-sleet main-weather-icon"></i>
+      </div>
+      <p class="main-content__weather-text weather-text">Снежная ночь</p>
     </div>
-    <p class="main-content__weather-text weather-text">Снежная ночь</p>
     <div class="main-content__weather-parameters weather-parameters">
-      <div class="weather-parameters__precipitation-chance precipitation-chance"></div>
-      <div class="weather-parameters__humidity humidity"></div>
-      <div class="weather-parameters__windiness windiness"></div>
+      <div class="weather-parameters__extended-data extended-data">
+        <i class="wi wi-night-sleet weather-parameters__extended-icon extended-icon"></i>
+        {{ '73' }}%</div>
+      <div class="weather-parameters__extended-data extended-data">
+        <i class="wi wi-humidity weather-parameters__extended-icon extended-icon"></i>
+        {{ '59' }}%</div>
+      <div class="weather-parameters__extended-data extended-data">
+        <i class="wi wi-strong-wind weather-parameters__extended-icon extended-icon"></i>
+        {{ '15' }}м/с</div>
       <p class="weather-parameters__parameters-text parameters-text">Generally snowy with storms.</p>
     </div>
   </div>
@@ -24,13 +32,15 @@
   flex-direction: column
   justify-content: flex-start
   flex: 1 0 auto
-  &__temperature-wrapper
-    margin-top: 10vh
-  &__weather-text
-    margin-top: 8px
+  &__present-weather
+    flex: 1 0 auto
+    margin-bottom: 20px
   &__weather-parameters
-    margin-top: auto
-    margin-bottom: 7%
+    flex: 0 1 auto
+.present-weather
+  display: flex
+  flex-direction: column
+  justify-content: center
 .temperature-wrapper
   display: flex
   justify-content: center
@@ -39,7 +49,7 @@
   font-weight: 300
   font-size: 96px
   margin-right: 10px
-.weather-icon
+.main-weather-icon
   font-size: 62px
 .weather-text
   font-size: 20px
@@ -48,11 +58,20 @@
   display: grid
   grid-template-columns: repeat(3, 1fr)
   grid-template-rows: 2fr 1fr
+  grid-row-gap: 15px
   &__parameters-text
-    grid-column-start: 1
-    grid-column-end: 4
+    grid-column: 1/ -1
     margin: 0 auto
+.extended-data
+  display: flex
+  flex-direction: column
+  justify-content: center
+  align-items: center
+  gap: 13px
+  font-size: 22px
+.extended-icon
+  font-size: 24px
 .parameters-text
-  display: inline-flex
   font-size: 16px
+  height: 40px
 </style>

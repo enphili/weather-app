@@ -18,7 +18,7 @@
           <span class="single-location__temperature temperature">{{ '-16' }}&deg;</span>
           <i class="wi wi-night-sleet single-location__weather-icon weather-icon"></i>
           <span class="single-location__location-text location-text">Екатеринбург</span>
-          <button class="single-location__mark-btn mark-btn mark-btn--remove">+</button>
+          <button class="single-location__mark-btn mark-btn mark-btn--remove">&#10006;</button>
         </div>
       </div>
       <div class="empty-block" @click.stop="isMenuActive = !isMenuActive"></div>
@@ -46,7 +46,7 @@ let isMenuActive: Ref<boolean> = ref(false)
   &__location-name
     margin-left: 12px
   &__collapse-menu
-    position: absolute
+    position: fixed
     inset: 0
   &__add-location-btn
     position: absolute
@@ -66,7 +66,7 @@ let isMenuActive: Ref<boolean> = ref(false)
     display: block
     width: 100%
     height: 2px
-    background-color: #fff
+    background-color: #f1f5f6
   & > span::before
     content: ''
     top: -5px
@@ -77,8 +77,9 @@ let isMenuActive: Ref<boolean> = ref(false)
   font-size: 20px
 .collapse-menu
   display: none
+  height: 100%
   width: 100%
-  background-color: #fff
+  background-color: #f1f5f6
   &--active
     display: flex
     flex-direction: column
@@ -140,11 +141,9 @@ let isMenuActive: Ref<boolean> = ref(false)
   cursor: pointer
   &--remove
     border-radius: 50%
-    font-size: 23px
     line-height: 10px
-    background-color: #B6BEC3
-    color: #fff
-    transform: rotate(-45deg)
+    background-color: #f1f5f6
+    color: rgba(0,0,0,0.75)
   &--location
     background-color: transparent
     background-image: url("../assets/img/localization.svg")
