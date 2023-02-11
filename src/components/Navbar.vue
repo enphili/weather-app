@@ -38,7 +38,7 @@ let isMenuActive: Ref<boolean> = ref(false)
 
 
 
-<style scoped lang="sass">
+<style lang="sass">
 .navbar
   display: flex
   align-items: center

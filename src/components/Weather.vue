@@ -26,7 +26,7 @@
 
 </script>
 
-<style scoped lang="sass">
+<style lang="sass">
 .main-content
   display: flex
   flex-direction: column
