@@ -2,19 +2,21 @@
   <div class="weather-app" :style="{ backgroundImage: `url(${backgroundUrl})` }">
     <h1 class="weather-app__title">Приложение погоды</h1>
 
-    <Navbar />
+    <Navbar
+      :isShadow="currentTab !== 0"
+    ></Navbar>
 
     <KeepAlive>
       <component :is="menuItems[currentTab].component"></component>
     </KeepAlive>
 
-    <div class="weather-app__footer-nav footer-nav">
+    <div class="weather-app__footer-nav footer-nav" :class="{'footer-nav--shadow': currentTab !== 0}">
       <FooterTab
         v-for="(menu, idx) in menuItems"
         :key="menu.title"
         :title="menu.title"
         :is-active="currentTab === idx"
-        @click="currentTab = idx"
+        @click="changeTab(idx)"
       >
         <div v-html="menu.svg"></div>
       </FooterTab>
@@ -58,6 +60,10 @@ const menuItems: {component: any, title: string, svg: string}[] = [
   }
 ]
 
+const changeTab = (idx: number): void => {
+  currentTab.value = idx
+}
+
 </script>
 
 <style lang="sass">
@@ -75,10 +81,17 @@ const menuItems: {component: any, title: string, svg: string}[] = [
 .weather-app__title
   display: none
 .footer-nav
+  position: fixed
+  bottom: 0
   display: grid
   grid-template-columns: repeat(3, 1fr)
+  width: 100%
+  &--shadow
+    box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.12)
 @media only screen and (min-width: 768px)
   .weather-app
     max-width: 480px
     margin: auto
+  .footer-nav
+    max-width: 480px
 </style>

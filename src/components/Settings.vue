@@ -1,5 +1,7 @@
 <template>
-  <div class="tab">Settings</div>
+  <div class="weather-app__main-content main-content main-content--fill-white">
+    Settings.vue
+  </div>
 </template>
 
 <script setup lang="ts">

@@ -1,5 +1,5 @@
 <template>
-  <nav class="weather-app__navbar navbar">
+  <nav class="weather-app__navbar navbar" :class="{'navbar--shadow': isShadow}">
     <button class="navbar__menu-button menu-button" @click.stop="isMenuActive = !isMenuActive"><span></span></button>
     <span class="navbar__location-name location-name">{{ locationName }}</span>
     <div :class="[{'collapse-menu--active': isMenuActive}, 'navbar__collapse-menu', 'collapse-menu']">
@@ -33,16 +33,24 @@ import {Ref, ref} from 'vue'
 const locationName: Ref<string> = ref('Moscow')
 let isMenuActive: Ref<boolean> = ref(false)
 
+const props = defineProps<{
+  isShadow?: boolean
+}>()
 
 </script>
 
 
 
 <style lang="sass">
+.weather-app
+  &__navbar
+    position: fixed
+    z-index: 10
 .navbar
   display: flex
   align-items: center
   height: 56px
+  width: 100%
   &__location-name
     margin-left: 12px
   &__collapse-menu
@@ -52,6 +60,9 @@ let isMenuActive: Ref<boolean> = ref(false)
     position: absolute
     bottom: 16px
     right: 16px
+  &--shadow
+    background-color: #673AB7
+    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.12), 0px 4px 4px rgba(0, 0, 0, 0.24)
 .menu-button
   display: inline-block
   align-items: center
@@ -155,7 +166,9 @@ let isMenuActive: Ref<boolean> = ref(false)
 .empty-block
   flex: 1 0 auto
 @media only screen and (min-width: 768px)
-  .navbar__collapse-menu
+  .navbar
     max-width: 480px
-    margin: auto
+    &__collapse-menu
+      max-width: 480px
+      margin: auto
 </style>

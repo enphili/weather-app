@@ -26,12 +26,12 @@ const props = defineProps<{
     padding: 9px 0
     border: none
     font-size: 12px
-    color: rgba(0,0,0,0.75)
+    color: rgba(0,0,0,0.5)
     background-color: #f1f5f6
     overflow: hidden
     cursor: pointer
     & svg
-      fill: rgba(0,0,0,0.75)
+      fill: rgba(0,0,0,0.5)
 .button--active
   color: #FF5722
   &  svg

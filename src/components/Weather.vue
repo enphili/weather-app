@@ -27,6 +27,10 @@
 </script>
 
 <style lang="sass">
+.weather-app
+  &__main-content
+    margin-top: 56px
+    margin-bottom: 59px
 .main-content
   display: flex
   flex-direction: column
