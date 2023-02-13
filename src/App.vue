@@ -4,6 +4,7 @@
 
     <Navbar
       :isShadow="currentTab !== 0"
+      :header="header"
     ></Navbar>
 
     <KeepAlive>
@@ -32,9 +33,9 @@ import Weather from './components/Weather.vue'
 import Forecast from './components/Forecast.vue'
 import Settings from './components/Settings.vue'
 import backgroundUrl from './assets/img/clear_night.webp'
-import {ref} from 'vue'
+import {Ref, ref} from 'vue'
 
-const currentTab = ref(0)
+const currentTab: Ref<number> = ref(0)
 
 const menuItems: {component: any, title: string, svg: string}[] = [
   {
@@ -60,8 +61,16 @@ const menuItems: {component: any, title: string, svg: string}[] = [
   }
 ]
 
+const header: Ref<string> = ref('Moscow')
+
 const changeTab = (idx: number): void => {
   currentTab.value = idx
+  if (idx === menuItems.length - 1) {
+    header.value = 'Настройки'
+  }
+  else {
+    header.value = 'Moscow'
+  }
 }
 
 </script>

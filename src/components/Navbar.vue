@@ -1,7 +1,7 @@
 <template>
   <nav class="weather-app__navbar navbar" :class="{'navbar--shadow': isShadow}">
     <button class="navbar__menu-button menu-button" @click.stop="isMenuActive = !isMenuActive"><span></span></button>
-    <span class="navbar__location-name location-name">{{ locationName }}</span>
+    <span class="navbar__location-name location-name">{{ header }}</span>
     <div :class="[{'collapse-menu--active': isMenuActive}, 'navbar__collapse-menu', 'collapse-menu']">
       <div class="navbar__collapse-header collapse-header">
         <span class="navbar__collapse-title collapse-title">Избранные локации</span>
@@ -30,11 +30,11 @@
 <script setup lang="ts">
 import {Ref, ref} from 'vue'
 
-const locationName: Ref<string> = ref('Moscow')
 let isMenuActive: Ref<boolean> = ref(false)
 
 const props = defineProps<{
-  isShadow?: boolean
+  isShadow?: boolean,
+  header: string
 }>()
 
 </script>
