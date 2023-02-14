@@ -36,12 +36,19 @@
         <div class="setting-point__description description">
           <span class="setting-point__setting-name setting-name">Единицы измерения</span>
           <span class="setting-point__setting-description setting-description">Метрическая(С&deg; / км/ч / мм)</span>
+          <span class="setting-point__setting-description setting-description">Английская(F&deg; / mph / inHg)</span>
         </div>
-        <div class="setting-point__action-button action-button">
-          <label class="switch" for="measure">
-            <input type="checkbox" id="measure" />
-            <div class="slider round"></div>
-          </label>
+        <div class="setting-point__action-button action-button mr17">
+          <div class="radio-wrapper">
+            <label class="metric" for="metric">
+              <input type="radio" id="metric" name="radio-group" checked>
+              <span class="design"></span>
+            </label>
+            <label class="metric" for="english">
+              <input type="radio" id="english" name="radio-group" checked>
+              <span class="design"></span>
+            </label>
+          </div>
         </div>
       </div>
     </div>
@@ -56,15 +63,15 @@
 <style lang="sass">
 .main-content
   &__setting-point:first-child
-    margin-top: 24px
+    margin-top: 30px
     margin-bottom: 30px
   &__setting-point:not(:last-child)
-    margin-bottom: 30px
+    margin-bottom: 40px
 .setting-point
   display: grid
   grid-template-columns: 5fr 1fr
   &__setting-description
-    margin-top: 10px
+    margin-top: 15px
 .description
   display: flex
   flex-direction: column
@@ -74,9 +81,13 @@
   color: rgba(0,0,0,0.5)
 .action-button
   display: flex
+  flex-direction: column
+  justify-content: center
   align-items: center
   margin-right: 7px
   margin-left: auto
+.mr17
+  margin-right: 17px
 .switch
   position: relative
   display: inline-block
@@ -110,4 +121,26 @@ input:checked + .slider:before
   border-radius: 34px
 .slider.round:before
   border-radius: 50%
+.radio-wrapper
+  display: flex
+  flex-direction: column
+  justify-content: space-between
+  height: 58px
+  margin-top: 21px
+.metric
+  display: flex
+  align-items: center
+  cursor: pointer
+label input[type="radio"]
+  display: none
+.design
+  width: 8px
+  height: 8px
+  border-radius: 50%
+  outline-offset: 4px
+  outline: 3px solid rgba(34, 31, 31, 0.26)
+  margin-bottom: 10px
+label input[type="radio"]:checked~.design
+  outline-color: rgba(255, 87, 34, 0.5)
+  background: #FF5722
 </style>
