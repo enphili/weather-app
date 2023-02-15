@@ -125,8 +125,8 @@ input:checked + .slider:before
   display: flex
   flex-direction: column
   justify-content: space-between
-  height: 58px
-  margin-top: 21px
+  height: 50px
+  margin-top: 30px
 .metric
   display: flex
   align-items: center

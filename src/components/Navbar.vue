@@ -22,24 +22,54 @@
         </div>
       </div>
       <div class="empty-block" @click.stop="isMenuActive = !isMenuActive"></div>
-      <button class="navbar__add-location-btn add-location-btn">+</button>
+
+      <div class="navbar__collapse-menu collapse-menu mapping" :class="{'collapse-menu--active': showMap}">
+        <div class="navbar__collapse-header collapse-header">
+          <span class="navbar__collapse-title collapse-title">Выбор местоположения</span>
+          <button class="navbar__collapse-close collapse-close" @click.stop="showMap = !showMap">&#10006;</button>
+        </div>
+        <YandexMap
+          :coordinates="[56.838441, 60.603436]"
+          :controls="['searchControl', 'zoomControl']"
+          :settings="mapSetting"
+        />
+      </div>
+
+      <button class="navbar__add-location-btn add-location-btn" @click="showMap = true">+</button>
     </div>
   </nav>
 </template>
 
 <script setup lang="ts">
+import { YandexMap  } from 'vue-yandex-maps'
 import {Ref, ref} from 'vue'
-
-let isMenuActive: Ref<boolean> = ref(false)
 
 const props = defineProps<{
   isShadow?: boolean,
   header: string
 }>()
 
+interface ImapSetting {
+  apiKey: string,
+  lang: string,
+  debug: boolean,
+  version: string,
+  load: string
+}
+
+let isMenuActive: Ref<boolean> = ref(false)
+let showMap: Ref<boolean> = ref(false)
+
+const mapSetting: ImapSetting = {
+  apiKey: import.meta.env.VITE_YANDEX_API_KEY,
+  lang: 'ru_RU',
+  debug: false,
+  version: '2.1',
+  load: 'Map'
+}
+
+
 </script>
-
-
 
 <style lang="sass">
 .weather-app
@@ -126,7 +156,7 @@ const props = defineProps<{
 .single-location
   display: flex
   align-items: center
-  padding: 10px 15px
+  padding: 15px 15px
   color: rgba(0,0,0,0.75)
   &__weather-icon
     margin-left: 0
@@ -165,6 +195,10 @@ const props = defineProps<{
   font-size: 18px
 .empty-block
   flex: 1 0 auto
+.mapping
+  z-index: 9
+.yandex-container
+  height: 100%
 @media only screen and (min-width: 768px)
   .navbar
     max-width: 480px

@@ -34,10 +34,12 @@ import Forecast from './components/Forecast.vue'
 import Settings from './components/Settings.vue'
 import backgroundUrl from './assets/img/clear_night.webp'
 import {Ref, ref} from 'vue'
+import type { Component } from 'vue'
 
 const currentTab: Ref<number> = ref(0)
+const header: Ref<string> = ref('Moscow')
 
-const menuItems: {component: any, title: string, svg: string}[] = [
+const menuItems: {component: Component, title: string, svg: string}[] = [
   {
     component: Weather,
     title: 'Погода',
@@ -60,8 +62,6 @@ const menuItems: {component: any, title: string, svg: string}[] = [
     '        </svg>'
   }
 ]
-
-const header: Ref<string> = ref('Moscow')
 
 const changeTab = (idx: number): void => {
   currentTab.value = idx
