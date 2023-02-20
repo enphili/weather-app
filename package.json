@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@types/yandex-maps": "^2.1.29",
     "sass": "^1.58.0",
     "vue": "^3.2.45",
     "vue-skycons": "^4.2.0",

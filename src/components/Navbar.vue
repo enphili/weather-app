@@ -8,31 +8,29 @@
         <button class="navbar__collapse-close collapse-close" @click.stop="isMenuActive = !isMenuActive">&#10006;</button>
       </div>
       <div class="navbar__favorite-locations favorite-locations">
-        <div class="favorite-locations__single-location single-location">
+
+        <div
+          class="favorite-locations__single-location single-location"
+          v-for="loc in locations"
+          :key="loc.name"
+        >
           <span class="single-location__temperature temperature">{{ '+26' }}&deg;</span>
           <i class="wi wi-night-sleet single-location__weather-icon weather-icon"></i>
-          <span class="single-location__location-text location-text">Novosibirsk</span>
-          <button class="single-location__mark-btn mark-btn mark-btn--location"></button>
+          <span class="single-location__location-text location-text">{{ loc.name }}</span>
+          <button
+            :class="[loc.current ? 'mark-btn--location' : 'mark-btn--remove', 'single-location__mark-btn', 'mark-btn']"
+          ></button>
         </div>
-        <div class="favorite-locations__single-location single-location">
-          <span class="single-location__temperature temperature">{{ '-16' }}&deg;</span>
-          <i class="wi wi-night-sleet single-location__weather-icon weather-icon"></i>
-          <span class="single-location__location-text location-text">Екатеринбург</span>
-          <button class="single-location__mark-btn mark-btn mark-btn--remove">&#10006;</button>
-        </div>
+
       </div>
       <div class="empty-block" @click.stop="isMenuActive = !isMenuActive"></div>
 
       <div class="navbar__collapse-menu collapse-menu mapping" :class="{'collapse-menu--active': showMap}">
         <div class="navbar__collapse-header collapse-header">
           <span class="navbar__collapse-title collapse-title">Выбор местоположения</span>
-          <button class="navbar__collapse-close collapse-close" @click.stop="showMap = !showMap">&#10006;</button>
+          <button class="navbar__collapse-close collapse-close" @click="addLocation">&#10006;</button>
         </div>
-        <YandexMap
-          :coordinates="[56.838441, 60.603436]"
-          :controls="['searchControl', 'zoomControl']"
-          :settings="mapSetting"
-        />
+        <div id="map" ref="map" class="yandex-container"></div>
       </div>
 
       <button class="navbar__add-location-btn add-location-btn" @click="showMap = true">+</button>
@@ -41,33 +39,116 @@
 </template>
 
 <script setup lang="ts">
-import { YandexMap  } from 'vue-yandex-maps'
-import {Ref, ref} from 'vue'
+import { loadYmap } from 'vue-yandex-maps'
+import {onMounted, ref} from 'vue'
+import {Placemark} from "yandex-maps"
+import {getFromStorage} from '../utils/getfromstorage'
 
-const props = defineProps<{
+// пропсы
+defineProps<{
   isShadow?: boolean,
   header: string
 }>()
 
-interface ImapSetting {
-  apiKey: string,
-  lang: string,
-  debug: boolean,
-  version: string,
-  load: string
-}
-
-let isMenuActive: Ref<boolean> = ref(false)
-let showMap: Ref<boolean> = ref(false)
-
-const mapSetting: ImapSetting = {
+// переменные
+const map = ref<HTMLElement | null>(null)
+let isMenuActive = ref<boolean>(false)
+let showMap = ref<boolean>(false)
+const mapSetting: {
+  apiKey: string
+  lang: string
+  debug?: boolean
+  version?: string
+} = {
   apiKey: import.meta.env.VITE_YANDEX_API_KEY,
   lang: 'ru_RU',
   debug: false,
-  version: '2.1',
-  load: 'Map'
+  version: '2.1'
+}
+const isChoose = ref<boolean>(false)
+const coordinates = ref<[number, number]>([56.838441, 60.603436]) // начальные координаты
+const iconCaption = ref<string>('')
+const locations = ref<{name: string, coords: [number, number], current: boolean}[]>(getFromStorage('weatherApp'))
+
+// методы
+const addLocation = (): void => {
+  showMap.value = !showMap.value
+  if (!isChoose.value) return
+  let hasLocation = locations.value.map(el => el.name).includes(iconCaption.value)
+  if (!hasLocation && iconCaption.value) {
+    locations.value.forEach(loc => loc.current = false)
+    locations.value.unshift({name: iconCaption.value, coords: coordinates.value, current: true})
+    localStorage.setItem('weatherApp', JSON.stringify(locations.value))
+  }
+  // TODO Добавить настройку ограничения количества выбраных локаций
 }
 
+// хуки
+onMounted(async () => {
+  await loadYmap(mapSetting)
+  await ymaps.ready(() => {
+    if (!map.value) return
+    let myPlacemark: Placemark
+
+    const myMap = new ymaps.Map(map.value, {
+      center: coordinates.value,
+      controls: ['zoomControl'],
+      zoom: 10
+    },
+      {
+      yandexMapDisablePoiInteractivity: true,
+      yandexMapAutoSwitch: false,
+      suppressObsoleteBrowserNotifier: true,
+      suppressMapOpenBlock: true,
+    })
+
+    const createPlacemark = (coords: [number, number]) => {
+      return new ymaps.Placemark(coords, {
+        iconCaption: 'поиск...'
+      }, {
+        preset: 'islands#violetDotIconWithCaption',
+        draggable: true
+      })
+    }
+
+    const getAddress = (coords: [number, number]) => {
+      myPlacemark.properties.set('iconCaption', 'поиск...')
+      ymaps.geocode(coords).then(function (res) {
+        const firstGeoObject = res.geoObjects.get(0)
+        iconCaption.value = [
+          firstGeoObject.getLocalities().length ? firstGeoObject.getLocalities() : firstGeoObject.getAdministrativeAreas()
+        ].filter(Boolean).join(', ')
+        myPlacemark.properties.set('iconCaption', iconCaption.value)
+      })
+    }
+
+    const searchControl = new ymaps.control.SearchControl({
+      options: {
+        provider: "yandex#map",
+        noPlacemark: true
+      }
+    })
+
+    myMap.events.add('click', function (e) {
+      coordinates.value = e.get('coords')
+      if (myPlacemark) {
+        myPlacemark.geometry?.setCoordinates(coordinates.value)
+      }
+      else {
+        myPlacemark = createPlacemark(coordinates.value)
+        myMap.geoObjects.add(myPlacemark)
+        myPlacemark.events.add('dragend', function () {
+          getAddress(myPlacemark.geometry?.getCoordinates() as [number, number])
+        })
+      }
+      getAddress(coordinates.value)
+      isChoose.value = true
+    })
+
+    myMap.controls.add(searchControl)
+  })
+
+})
 
 </script>
 
@@ -89,10 +170,10 @@ const mapSetting: ImapSetting = {
   &__add-location-btn
     position: absolute
     bottom: 16px
-    right: 16px
+    right: 35px
   &--shadow
     background-color: #673AB7
-    box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.12), 0px 4px 4px rgba(0, 0, 0, 0.24)
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.12), 0 4px 4px rgba(0, 0, 0, 0.24)
 .menu-button
   display: inline-block
   align-items: center
@@ -114,6 +195,8 @@ const mapSetting: ImapSetting = {
   & > span::after
     content: ''
     top: 3px
+.favorite-locations
+  overflow-y: auto
 .location-name
   font-size: 20px
 .collapse-menu
@@ -141,6 +224,7 @@ const mapSetting: ImapSetting = {
   width: 56px
   height: 56px
   border: none
+  cursor: pointer
 .collapse-close
   font-size: 20px
   color: rgba(225,225,225,0.95)
@@ -162,7 +246,7 @@ const mapSetting: ImapSetting = {
     margin-left: 0
     margin-right: 15px
   &__location-text
-    margin-top: 3px
+    margin-right: 10px
   &__mark-btn
     margin-left: auto
 .temperature
@@ -170,27 +254,25 @@ const mapSetting: ImapSetting = {
   font-size: 18px
   font-weight: bold
 .location-text
-  max-width: 140px
-  line-height: 20px
+  font-size: 13px
+  line-height: 14px
   overflow: hidden
   color: rgba(0,0,0,1)
 .mark-btn
-  height: 16px
-  width: 16px
+  min-height: 16px
+  min-width: 16px
   padding: 0
   border: none
+  background-color: transparent
+  background-repeat: no-repeat
+  background-position: center
   cursor: pointer
   &--remove
-    border-radius: 50%
-    line-height: 10px
-    background-color: #f1f5f6
-    color: rgba(0,0,0,0.75)
+    background-image: url("../assets/img/close16.svg")
+    background-size: 145%
   &--location
-    background-color: transparent
     background-image: url("../assets/img/localization.svg")
-    background-repeat: no-repeat
     background-size: contain
-    background-position: center
 .weather-icon
   font-size: 18px
 .empty-block
