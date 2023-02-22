@@ -2,7 +2,7 @@
   <div class="weather-app__main-content main-content main-content--fill-white">
 
     <div class="date-block">
-      <span class="today">Настройки приложения</span>
+      <span class="today">Выберите предпочтения</span>
     </div>
 
     <div>
@@ -51,6 +51,23 @@
           </div>
         </div>
       </div>
+
+      <div class="main-content__setting-point setting-point">
+        <div class="setting-point__description description">
+          <span class="setting-point__setting-name setting-name">Количество избранных локаций</span>
+          <span class="setting-point__setting-description setting-description">Максимальное количество локаций которые можно добавить в избранное</span>
+        </div>
+        <div class="setting-point__action-button action-button">
+
+          <vue-select
+            :isPlaceholderNeed=false
+            :showArrowDown=false
+            :data="[5,10,15,20]"
+            :selected-item="1"
+          ></vue-select>
+
+        </div>
+      </div>
     </div>
 
   </div>
@@ -58,6 +75,7 @@
 
 <script setup lang="ts">
 
+import VueSelect from "../plugins/vue-select/VueSelect.vue";
 </script>
 
 <style lang="sass">
@@ -72,6 +90,7 @@
   grid-template-columns: 5fr 1fr
   &__setting-description
     margin-top: 15px
+    margin-right: 10px
 .description
   display: flex
   flex-direction: column
@@ -110,7 +129,7 @@
   height: 20px
   width: 20px
   background-color: #F1F1F1
-  box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.12), 0px 1px 1px rgba(0, 0, 0, 0.237602)
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0.12), 0 1px 1px rgba(0, 0, 0, 0.237602)
   transition: .4s
 input:checked + .slider
   background-color: rgba(255, 87, 34, 0.5)
