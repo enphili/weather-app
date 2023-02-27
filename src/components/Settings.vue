@@ -60,10 +60,10 @@
         <div class="setting-point__action-button action-button">
 
           <vue-select
-            :isPlaceholderNeed=false
-            :showArrowDown=false
-            :data="[5,10,15,20]"
-            :selected-item="1"
+            :is-placeholder-need="false"
+            :show-arrow-down="false"
+            :data="store.selectData"
+            :selected-item="store.selectCurrentItem"
           ></vue-select>
 
         </div>
@@ -74,8 +74,11 @@
 </template>
 
 <script setup lang="ts">
+import VueSelect from '../plugins/vue-select/VueSelect.vue'
+import {useLocationsStore} from '../store/Locations'
 
-import VueSelect from "../plugins/vue-select/VueSelect.vue";
+const store = useLocationsStore()
+
 </script>
 
 <style lang="sass">

@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@types/yandex-maps": "^2.1.29",
+    "pinia": "^2.0.32",
     "sass": "^1.58.0",
     "vue": "^3.2.45",
     "vue-skycons": "^4.2.0",

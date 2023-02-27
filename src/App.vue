@@ -3,12 +3,14 @@
     <h1 class="weather-app__title">Приложение погоды</h1>
 
     <Navbar
-      :isShadow="currentTab !== 0"
+      :is-shadow="currentTab !== 0"
       :header="header"
     ></Navbar>
 
     <KeepAlive>
-      <component :is="menuItems[currentTab].component"></component>
+      <component
+        :is="menuItems[currentTab].component"
+      ></component>
     </KeepAlive>
 
     <div class="weather-app__footer-nav footer-nav" :class="{'footer-nav--shadow': currentTab !== 0}">
@@ -33,12 +35,11 @@ import Weather from './components/Weather.vue'
 import Forecast from './components/Forecast.vue'
 import Settings from './components/Settings.vue'
 import backgroundUrl from './assets/img/clear_night.webp'
-import {Ref, ref} from 'vue'
+import { ref } from 'vue'
 import type { Component } from 'vue'
 
-const currentTab: Ref<number> = ref(0)
-const header: Ref<string> = ref('Moscow')
-
+const currentTab = ref<number>(0)
+const header = ref<string>('Moscow')
 const menuItems: {component: Component, title: string, svg: string}[] = [
   {
     component: Weather,
@@ -63,6 +64,8 @@ const menuItems: {component: Component, title: string, svg: string}[] = [
   }
 ]
 
+
+// методы
 const changeTab = (idx: number): void => {
   currentTab.value = idx
   if (idx === menuItems.length - 1) {
@@ -72,7 +75,6 @@ const changeTab = (idx: number): void => {
     header.value = 'Moscow'
   }
 }
-
 </script>
 
 <style lang="sass">
@@ -96,7 +98,7 @@ const changeTab = (idx: number): void => {
   grid-template-columns: repeat(3, 1fr)
   width: 100%
   &--shadow
-    box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.12)
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.12)
 @media only screen and (min-width: 768px)
   .weather-app
     max-width: 480px

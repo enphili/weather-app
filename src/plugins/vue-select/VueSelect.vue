@@ -24,30 +24,61 @@
 </template>
 
 <script setup lang="ts">
-import {ref} from 'vue'
+import { ref } from 'vue'
+import type { PropType } from 'vue'
+import {useLocationsStore} from '../../store/Locations'
+import {beyondGuard} from '../../utils/preventArrayOverflow'
 
-export interface Props {
-  placeholder?: string | number
-  showArrowDown?: boolean
-  data: (number | string)[],
-  selectedItem?: number,
-  isPlaceholderNeed?: boolean
-}
-const props = withDefaults(defineProps<Props>(), {
-  placeholder: 'Выбрать значение',
-  showArrowDown: true,
-  selectedItem: 0,
-  isPlaceholderNeed: true
+type TDate =  (number | string)[]
+
+const props = defineProps({
+  placeholder: {
+    type: [String, Number],
+    required: false,
+    default: 'Выбрать значение'
+  },
+  showArrowDown: {
+    type: Boolean,
+    required: false,
+    default: true
+  },
+  isPlaceholderNeed: {
+    type: Boolean,
+    required: false,
+    default: true
+  },
+  data: {
+    type: Array as PropType<TDate>,
+    required: true,
+  },
+  selectedItem: {
+    type: Number,
+    required: false,
+    default: 0
+  }
 })
 
+
+const store = useLocationsStore()
 const isOpen = ref<boolean>(false)
 const selectedId = ref(props.selectedItem)
-const currentValue = ref(props.isPlaceholderNeed ? props.placeholder : props.data[props.selectedItem])
+const currentValue = ref(props.isPlaceholderNeed ? props.placeholder : beyondGuard(props.data, props.selectedItem))
 
-const selectItem = (value: string | number, id: number) => {
-  selectedId.value = id
+const selectItem = (value: string | number, idx: number) => {
+  selectedId.value = idx
   currentValue.value = value
   isOpen.value = false
+  if (typeof value === 'string') {
+    const number = Number(value)
+    if (isNaN(number)) {
+      throw new Error(`value ${value} cannot be converted to a number`)
+    }
+    store.changeSelectValue(idx, number)
+    store.reduceLocationsLength(number)
+  } else {
+    store.changeSelectValue(idx, value)
+    store.reduceLocationsLength(value)
+  }
 }
 
 const clickHandler = (e: MouseEvent) => {

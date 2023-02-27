@@ -11,7 +11,7 @@
 
         <div
           class="favorite-locations__single-location single-location"
-          v-for="loc in locations"
+          v-for="(loc, index) in locations"
           :key="loc.name"
         >
           <span class="single-location__temperature temperature">{{ '+26' }}&deg;</span>
@@ -19,6 +19,7 @@
           <span class="single-location__location-text location-text">{{ loc.name }}</span>
           <button
             :class="[loc.current ? 'mark-btn--location' : 'mark-btn--remove', 'single-location__mark-btn', 'mark-btn']"
+            @click="store.removeOneLocation(loc.current, index)"
           ></button>
         </div>
 
@@ -40,17 +41,18 @@
 
 <script setup lang="ts">
 import { loadYmap } from 'vue-yandex-maps'
-import {onMounted, ref} from 'vue'
+import { onMounted, ref} from 'vue'
 import {Placemark} from "yandex-maps"
-import {getFromStorage} from '../utils/getfromstorage'
+import {useLocationsStore} from '../store/Locations'
 
 // пропсы
-defineProps<{
+const props = defineProps<{
   isShadow?: boolean,
-  header: string
+  header: string,
 }>()
 
 // переменные
+const store = useLocationsStore()
 const map = ref<HTMLElement | null>(null)
 let isMenuActive = ref<boolean>(false)
 let showMap = ref<boolean>(false)
@@ -68,19 +70,13 @@ const mapSetting: {
 const isChoose = ref<boolean>(false)
 const coordinates = ref<[number, number]>([56.838441, 60.603436]) // начальные координаты
 const iconCaption = ref<string>('')
-const locations = ref<{name: string, coords: [number, number], current: boolean}[]>(getFromStorage('weatherApp'))
+const locations = store.getLocation
 
 // методы
 const addLocation = (): void => {
   showMap.value = !showMap.value
   if (!isChoose.value) return
-  let hasLocation = locations.value.map(el => el.name).includes(iconCaption.value)
-  if (!hasLocation && iconCaption.value) {
-    locations.value.forEach(loc => loc.current = false)
-    locations.value.unshift({name: iconCaption.value, coords: coordinates.value, current: true})
-    localStorage.setItem('weatherApp', JSON.stringify(locations.value))
-  }
-  // TODO Добавить настройку ограничения количества выбраных локаций
+  store.addNewLocation(iconCaption.value, coordinates.value)
 }
 
 // хуки
