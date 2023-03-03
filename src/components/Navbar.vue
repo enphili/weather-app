@@ -43,15 +43,13 @@
 import { loadYmap } from 'vue-yandex-maps'
 import { onMounted, ref} from 'vue'
 import {Placemark} from "yandex-maps"
-import {useLocationsStore} from '../store/Locations'
+import {useLocationsStore} from '../store/locations'
 
-// пропсы
-const props = defineProps<{
+defineProps<{
   isShadow?: boolean,
   header: string,
 }>()
 
-// переменные
 const store = useLocationsStore()
 const map = ref<HTMLElement | null>(null)
 let isMenuActive = ref<boolean>(false)
@@ -70,16 +68,14 @@ const mapSetting: {
 const isChoose = ref<boolean>(false)
 const coordinates = ref<[number, number]>([56.838441, 60.603436]) // начальные координаты
 const iconCaption = ref<string>('')
-const locations = store.getLocation
+const locations = store.getLocations
 
-// методы
 const addLocation = (): void => {
   showMap.value = !showMap.value
   if (!isChoose.value) return
   store.addNewLocation(iconCaption.value, coordinates.value)
 }
 
-// хуки
 onMounted(async () => {
   await loadYmap(mapSetting)
   await ymaps.ready(() => {
@@ -173,7 +169,7 @@ onMounted(async () => {
 .menu-button
   display: inline-block
   align-items: center
-  width: 56px
+  min-width: 56px
   height: 56px
   padding: 20px 20px
   border: none
@@ -194,7 +190,10 @@ onMounted(async () => {
 .favorite-locations
   overflow-y: auto
 .location-name
-  font-size: 20px
+  font-size: 18px
+  overflow: hidden
+  white-space: nowrap
+  text-overflow: ellipsis
 .collapse-menu
   display: none
   height: 100%

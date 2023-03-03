@@ -9,7 +9,7 @@
       <div class="main-content__setting-point setting-point">
         <div class="setting-point__description description">
           <span class="setting-point__setting-name setting-name">Уведомления</span>
-          <span class="setting-point__setting-description setting-description">Текущее место - Москва</span>
+          <span class="setting-point__setting-description setting-description">Текущее место - {{ header }}</span>
         </div>
         <div class="setting-point__action-button action-button">
           <label class="switch" for="notificatons">
@@ -45,7 +45,7 @@
               <span class="design"></span>
             </label>
             <label class="metric" for="english">
-              <input type="radio" id="english" name="radio-group" checked>
+              <input type="radio" id="english" name="radio-group">
               <span class="design"></span>
             </label>
           </div>
@@ -54,7 +54,7 @@
 
       <div class="main-content__setting-point setting-point">
         <div class="setting-point__description description">
-          <span class="setting-point__setting-name setting-name">Количество избранных локаций</span>
+          <span class="setting-point__setting-name setting-name">Избранные локаций</span>
           <span class="setting-point__setting-description setting-description">Максимальное количество локаций которые можно добавить в избранное</span>
         </div>
         <div class="setting-point__action-button action-button">
@@ -75,9 +75,11 @@
 
 <script setup lang="ts">
 import VueSelect from '../plugins/vue-select/VueSelect.vue'
-import {useLocationsStore} from '../store/Locations'
+import {useLocationsStore} from '../store/locations'
+import {computed} from 'vue'
 
 const store = useLocationsStore()
+const header = computed(() => store.currentLocationName)
 
 </script>
 

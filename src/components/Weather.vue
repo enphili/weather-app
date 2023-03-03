@@ -1,11 +1,15 @@
 <template>
+  <transition>
+    <loader v-if="isLoader"></loader>
+  </transition>
+
   <div class="weather-app__main-content main-content">
     <div class="main-content__present-weather present-weather">
       <div class="main-content__temperature-wrapper temperature-wrapper">
-        <span class="main-content__today-temperature today-temperature">{{ '-13' }}&deg;</span>
+        <span class="main-content__today-temperature today-temperature">{{ weather.main?.temp }}&deg;</span>
         <i class="wi wi-night-sleet main-weather-icon"></i>
       </div>
-      <p class="main-content__weather-text weather-text">Снежная ночь</p>
+      <p class="main-content__weather-text weather-text">{{ 'Снежная ночь' }}</p>
     </div>
     <div class="main-content__weather-parameters weather-parameters">
       <div class="weather-parameters__extended-data extended-data">
@@ -17,16 +21,34 @@
       <div class="weather-parameters__extended-data extended-data">
         <i class="wi wi-strong-wind weather-parameters__extended-icon extended-icon"></i>
         {{ '15' }}м/с</div>
-      <p class="weather-parameters__parameters-text parameters-text">Generally snowy with storms.</p>
+      <p class="weather-parameters__parameters-text parameters-text">{{ 'Generally snowy with storms.' }}</p>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import Loader from './Loader.vue'
+import {useWeatherStore} from '../store/weather'
+import {computed, onMounted, ref} from 'vue'
+
+const store = useWeatherStore()
+const isLoader = ref<boolean>(false)
+
+onMounted(async () => {
+  isLoader.value = true
+  await store.weatherQueryDB()
+  isLoader.value = false
+})
+
+const weather = computed(() => store.getSingleWeather)
 
 </script>
 
 <style lang="sass">
+.v-enter-active, .v-leave-active
+  transition: opacity 0.5s ease
+.v-enter-from, .v-leave-to
+  opacity: 0
 .weather-app
   &__main-content
     margin-top: 56px
@@ -51,8 +73,9 @@
   align-items: center
 .today-temperature
   font-weight: 300
-  font-size: 96px
+  font-size: 70px
   margin-right: 10px
+  overflow: hidden
 .main-weather-icon
   font-size: 62px
 .weather-text

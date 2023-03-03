@@ -35,11 +35,12 @@ import Weather from './components/Weather.vue'
 import Forecast from './components/Forecast.vue'
 import Settings from './components/Settings.vue'
 import backgroundUrl from './assets/img/clear_night.webp'
-import { ref } from 'vue'
+import {computed, ref} from 'vue'
 import type { Component } from 'vue'
+import {useLocationsStore} from './store/locations'
 
+const store = useLocationsStore()
 const currentTab = ref<number>(0)
-const header = ref<string>('Moscow')
 const menuItems: {component: Component, title: string, svg: string}[] = [
   {
     component: Weather,
@@ -63,16 +64,14 @@ const menuItems: {component: Component, title: string, svg: string}[] = [
     '        </svg>'
   }
 ]
+let header = computed(() => store.currentLocationName)
 
-
-// методы
 const changeTab = (idx: number): void => {
   currentTab.value = idx
   if (idx === menuItems.length - 1) {
-    header.value = 'Настройки'
-  }
-  else {
-    header.value = 'Moscow'
+    header = computed(() => 'Настройки')
+  } else {
+    header = computed(() => store.currentLocationName)
   }
 }
 </script>

@@ -26,7 +26,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import type { PropType } from 'vue'
-import {useLocationsStore} from '../../store/Locations'
+import {useLocationsStore} from '../../store/locations'
 import {beyondGuard} from '../../utils/preventArrayOverflow'
 
 type TDate =  (number | string)[]

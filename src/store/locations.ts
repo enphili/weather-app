@@ -1,7 +1,12 @@
 import { defineStore } from 'pinia'
 import {computed, ref} from 'vue'
 import { beyondGuard } from '../utils/preventArrayOverflow'
-import {getCurrentLimit, getFromStorage, setCurrentLimit, setToStorage} from '../utils/getfromstorage'
+import {
+  getCurrentLimit,
+  getFromStorage,
+  setCurrentLimit,
+  setToStorage
+} from '../utils/getfromstorage'
 
 export const useLocationsStore = defineStore('locations', () => {
   // state
@@ -11,8 +16,8 @@ export const useLocationsStore = defineStore('locations', () => {
   const locations = ref<{name: string, coords: [number, number], current: boolean}[]>(getFromStorage('weatherApp'))
   
   // getters
-  const getLocation = computed(() => locations.value)
-  
+  const getLocations = computed(() => locations.value)
+  const currentLocationName = computed(() => locations.value[0].name)
   
   // actions
   const changeSelectValue = (index: number, value: number) => {
@@ -49,10 +54,11 @@ export const useLocationsStore = defineStore('locations', () => {
     selectData,
     selectCurrentItem,
     selectCurrentValue,
-    getLocation,
+    getLocations,
     addNewLocation,
     removeOneLocation,
     changeSelectValue,
-    reduceLocationsLength
+    reduceLocationsLength,
+    currentLocationName
   }
 })
