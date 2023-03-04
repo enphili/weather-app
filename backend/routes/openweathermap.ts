@@ -12,7 +12,8 @@ router.get('/api/weather', async (req, res, next) => {
     const response = await api({url, method: 'get'})
     res.status(200).json(response.data)
     next()
-  } catch (e) {
+  }
+  catch (e) {
     if (typeof e === 'string') {
       console.log(e)
     } else if (e instanceof Error) {

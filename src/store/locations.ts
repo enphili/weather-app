@@ -7,17 +7,19 @@ import {
   setCurrentLimit,
   setToStorage
 } from '../utils/getfromstorage'
+import {TLocation} from '../types/appTypes'
 
 export const useLocationsStore = defineStore('locations', () => {
   // state
   const selectData =[5,10,15,20]
   const selectCurrentItem = getCurrentLimit('weatherAppSettings')
   const selectCurrentValue = ref(beyondGuard(selectData, selectCurrentItem))
-  const locations = ref<{name: string, coords: [number, number], current: boolean}[]>(getFromStorage('weatherApp'))
+  const locations = ref<TLocation[]>(getFromStorage('weatherApp'))
   
   // getters
   const getLocations = computed(() => locations.value)
   const currentLocationName = computed(() => locations.value[0].name)
+  const currentLocationCoords = computed(() => locations.value[0].coords)
   
   // actions
   const changeSelectValue = (index: number, value: number) => {
@@ -50,6 +52,12 @@ export const useLocationsStore = defineStore('locations', () => {
     setToStorage('weatherApp', locations.value)
   }
   
+  const changeCurrentLocation = (idx: number) => {
+    locations.value.forEach(loc => loc.current = false)
+    locations.value[idx].current = true
+    locations.value.sort((a, b) => a.current ? -1 : b.current ? 1 : 0)
+  }
+  
   return {
     selectData,
     selectCurrentItem,
@@ -59,6 +67,8 @@ export const useLocationsStore = defineStore('locations', () => {
     removeOneLocation,
     changeSelectValue,
     reduceLocationsLength,
-    currentLocationName
+    currentLocationName,
+    currentLocationCoords,
+    changeCurrentLocation
   }
 })

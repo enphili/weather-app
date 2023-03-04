@@ -51,3 +51,9 @@ export interface ISingleWeather {
   name: string,
   cod: number
 }
+
+export type TLocation = {
+  name: string,
+  coords: [number, number],
+  current: boolean
+}

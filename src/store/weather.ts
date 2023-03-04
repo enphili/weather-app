@@ -10,14 +10,16 @@ export const useWeatherStore = defineStore({
   }),
   
   getters: {
-    getSingleWeather: (state): ISingleWeather => state.weatherData
+    getSingleWeather: (state) => state.weatherData
   },
   
   actions: {
-    async weatherQueryDB(): Promise<any> {
-      if (Object.keys(this.weatherData).length !== 0 ) return
+    async weatherQueryDB(coords: [number, number], isUpdate: boolean): Promise<any> {
+      if (!isUpdate) {
+        if (Object.keys(this.weatherData).length !== 0 ) return
+      }
       try {
-        const response = await axios.get(`/api/weather?lat=${56.83}&long=${60.60}&units=${'metric'}`)
+        const response = await axios.get(`/api/weather?lat=${coords[0]}&long=${coords[1]}&units=${'metric'}`)
         this.weatherData = response.data
       }
       catch (e) {

@@ -13,6 +13,7 @@
           class="favorite-locations__single-location single-location"
           v-for="(loc, index) in locations"
           :key="loc.name"
+          @click="chooseLocation($event, index, loc.coords)"
         >
           <span class="single-location__temperature temperature">{{ '+26' }}&deg;</span>
           <i class="wi wi-night-sleet single-location__weather-icon weather-icon"></i>
@@ -44,6 +45,7 @@ import { loadYmap } from 'vue-yandex-maps'
 import { onMounted, ref} from 'vue'
 import {Placemark} from "yandex-maps"
 import {useLocationsStore} from '../store/locations'
+import {useWeatherStore} from '../store/weather'
 
 defineProps<{
   isShadow?: boolean,
@@ -69,6 +71,14 @@ const isChoose = ref<boolean>(false)
 const coordinates = ref<[number, number]>([56.838441, 60.603436]) // начальные координаты
 const iconCaption = ref<string>('')
 const locations = store.getLocations
+
+const chooseLocation = async (e: MouseEvent, idx: number, coords: [number, number]) => {
+  if (e.target instanceof HTMLElement) {
+    if (e.target.tagName === 'BUTTON') return
+  }
+  store.changeCurrentLocation(idx)
+  await useWeatherStore().weatherQueryDB(coords, true)
+}
 
 const addLocation = (): void => {
   showMap.value = !showMap.value
@@ -237,6 +247,7 @@ onMounted(async () => {
   align-items: center
   padding: 15px 15px
   color: rgba(0,0,0,0.75)
+  cursor: pointer
   &__weather-icon
     margin-left: 0
     margin-right: 15px
