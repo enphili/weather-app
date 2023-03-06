@@ -1,8 +1,4 @@
-type TLocation = {
-  name: string,
-  coords: [number, number],
-  current: boolean
-}
+import {TLocation} from '../types/appTypes'
 
 export const getFromStorage = (key: string): [] => {
   const item = localStorage.getItem(key)
@@ -18,6 +14,14 @@ export const getCurrentLimit = (key: string): number => {
   return item ? JSON.parse(item).curLimitLoc : 0
 }
 
-export const setCurrentLimit = (key: string, value: number) => {
-  localStorage.setItem(key, JSON.stringify({curLimitLoc : value}))
+export const getCurrentUnitsFromLS = (key: string): string => {
+  const item = localStorage.getItem(key)
+  return item ? JSON.parse(item).units ? JSON.parse(item).units : 'metric' : 'metric'
+}
+
+export const setWeatherSetting = (key: string, subKey: string, value: string | number) => {
+  const item = localStorage.getItem(key)
+  const data = item ? JSON.parse(item) : {}
+  const obj = Object.assign(data, {[subKey]: value})
+  localStorage.setItem(key, JSON.stringify(obj))
 }

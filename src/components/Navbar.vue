@@ -77,7 +77,7 @@ const chooseLocation = async (e: MouseEvent, idx: number, coords: [number, numbe
     if (e.target.tagName === 'BUTTON') return
   }
   store.changeCurrentLocation(idx)
-  await useWeatherStore().weatherQueryDB(coords, true)
+  await useWeatherStore().weatherQueryDB(coords, store.currentUnits, true)
 }
 
 const addLocation = (): void => {

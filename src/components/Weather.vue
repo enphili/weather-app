@@ -33,11 +33,12 @@ import {computed, onMounted, ref} from 'vue'
 import {useLocationsStore} from '../store/locations'
 
 const store = useWeatherStore()
+const locStore = useLocationsStore()
 const isLoader = ref<boolean>(false)
 
 onMounted(async () => {
   isLoader.value = true
-  await store.weatherQueryDB(useLocationsStore().currentLocationCoords, false)
+  await store.weatherQueryDB(locStore.currentLocationCoords, locStore.currentUnits,false)
   isLoader.value = false
 })
 

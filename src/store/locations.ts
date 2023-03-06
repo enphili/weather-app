@@ -2,10 +2,8 @@ import { defineStore } from 'pinia'
 import {computed, ref} from 'vue'
 import { beyondGuard } from '../utils/preventArrayOverflow'
 import {
-  getCurrentLimit,
-  getFromStorage,
-  setCurrentLimit,
-  setToStorage
+  getCurrentLimit, getCurrentUnitsFromLS, getFromStorage,
+  setToStorage, setWeatherSetting
 } from '../utils/getfromstorage'
 import {TLocation} from '../types/appTypes'
 
@@ -15,6 +13,7 @@ export const useLocationsStore = defineStore('locations', () => {
   const selectCurrentItem = getCurrentLimit('weatherAppSettings')
   const selectCurrentValue = ref(beyondGuard(selectData, selectCurrentItem))
   const locations = ref<TLocation[]>(getFromStorage('weatherApp'))
+  const currentUnits = ref(getCurrentUnitsFromLS('weatherAppSettings'))
   
   // getters
   const getLocations = computed(() => locations.value)
@@ -23,8 +22,8 @@ export const useLocationsStore = defineStore('locations', () => {
   
   // actions
   const changeSelectValue = (index: number, value: number) => {
-    setCurrentLimit('weatherAppSettings', index)
     selectCurrentValue.value = value
+    setWeatherSetting('weatherAppSettings', 'curLimitLoc', index)
   }
   
   const reduceLocationsLength = (length: number) => {
@@ -58,6 +57,11 @@ export const useLocationsStore = defineStore('locations', () => {
     locations.value.sort((a, b) => a.current ? -1 : b.current ? 1 : 0)
   }
   
+  const changeUnits = (unite: string) => {
+    currentUnits.value = unite
+    setWeatherSetting('weatherAppSettings', 'units', unite)
+  }
+  
   return {
     selectData,
     selectCurrentItem,
@@ -69,6 +73,8 @@ export const useLocationsStore = defineStore('locations', () => {
     reduceLocationsLength,
     currentLocationName,
     currentLocationCoords,
-    changeCurrentLocation
+    changeCurrentLocation,
+    currentUnits,
+    changeUnits
   }
 })

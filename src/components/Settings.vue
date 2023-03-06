@@ -35,21 +35,33 @@
       <div class="main-content__setting-point setting-point">
         <div class="setting-point__description description">
           <span class="setting-point__setting-name setting-name">Единицы измерения</span>
-          <span class="setting-point__setting-description setting-description">Метрическая(С&deg; / км/ч / мм)</span>
-          <span class="setting-point__setting-description setting-description">Английская(F&deg; / mph / inHg)</span>
+          <span
+            class="setting-point__setting-description setting-description"
+            v-for="unit in unitsData"
+            :key="unit.value"
+          >
+            {{ unit.title }} ({{ unit.si }})
+          </span>
         </div>
-        <div class="setting-point__action-button action-button mr17">
-          <div class="radio-wrapper">
-            <label class="metric" for="metric">
-              <input type="radio" id="metric" name="radio-group" checked>
-              <span class="design"></span>
-            </label>
-            <label class="metric" for="english">
-              <input type="radio" id="english" name="radio-group">
-              <span class="design"></span>
-            </label>
-          </div>
+        <div class="setting-point__action-button action-button mr17 action-button--radio">
+
+          <label
+            class="metric"
+            v-for="unit in unitsData"
+            :for="unit.value"
+          >
+            <input
+              type="radio"
+              :id="unit.value"
+              :value="unit.value"
+              name="radio-group"
+              v-model="units"
+            >
+            <span class="design"></span>
+          </label>
+
         </div>
+        {{ units }}
       </div>
 
       <div class="main-content__setting-point setting-point">
@@ -76,10 +88,40 @@
 <script setup lang="ts">
 import VueSelect from '../plugins/vue-select/VueSelect.vue'
 import {useLocationsStore} from '../store/locations'
-import {computed} from 'vue'
+import {useWeatherStore} from '../store/weather'
+import {computed } from 'vue'
 
 const store = useLocationsStore()
+const weatherStore = useWeatherStore()
 const header = computed(() => store.currentLocationName)
+
+const unitsData = [
+  {
+    title: 'Metric',
+    si: 'С° / км/ч / мм',
+    value: 'metric'
+  },
+  {
+    title: 'Imperial',
+    si: 'F° / mph / inHg',
+    value: 'imperial'
+  },
+  {
+    title: 'Standard',
+    si: 'K° / mph / inHg',
+    value: 'standard'
+  },
+]
+
+const units = computed({
+  get() {
+    return store.currentUnits
+  },
+  set(val) {
+    store.changeUnits(val)
+    weatherStore.weatherQueryDB(store.currentLocationCoords, val, true)
+  }
+})
 
 </script>
 
@@ -110,6 +152,8 @@ const header = computed(() => store.currentLocationName)
   align-items: center
   margin-right: 7px
   margin-left: auto
+  &--radio
+    justify-content: flex-end
 .mr17
   margin-right: 17px
 .switch
@@ -145,15 +189,10 @@ input:checked + .slider:before
   border-radius: 34px
 .slider.round:before
   border-radius: 50%
-.radio-wrapper
-  display: flex
-  flex-direction: column
-  justify-content: space-between
-  height: 50px
-  margin-top: 30px
 .metric
   display: flex
   align-items: center
+  margin-top: 11px
   cursor: pointer
 label input[type="radio"]
   display: none

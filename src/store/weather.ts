@@ -14,12 +14,12 @@ export const useWeatherStore = defineStore({
   },
   
   actions: {
-    async weatherQueryDB(coords: [number, number], isUpdate: boolean): Promise<any> {
+    async weatherQueryDB(coords: [number, number], units: string, isUpdate: boolean): Promise<any> {
       if (!isUpdate) {
         if (Object.keys(this.weatherData).length !== 0 ) return
       }
       try {
-        const response = await axios.get(`/api/weather?lat=${coords[0]}&long=${coords[1]}&units=${'metric'}`)
+        const response = await axios.get(`/api/weather?lat=${coords[0]}&long=${coords[1]}&units=${units}`)
         this.weatherData = response.data
       }
       catch (e) {
