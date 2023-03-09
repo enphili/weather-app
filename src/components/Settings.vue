@@ -44,7 +44,6 @@
           </span>
         </div>
         <div class="setting-point__action-button action-button mr17 action-button--radio">
-
           <label
             class="metric"
             v-for="unit in unitsData"
@@ -59,9 +58,7 @@
             >
             <span class="design"></span>
           </label>
-
         </div>
-        {{ units }}
       </div>
 
       <div class="main-content__setting-point setting-point">
@@ -74,8 +71,8 @@
           <vue-select
             :is-placeholder-need="false"
             :show-arrow-down="false"
-            :data="store.selectData"
-            :selected-item="store.selectCurrentItem"
+            :data="locationsStore.selectData"
+            :selected-item="locationsStore.selectCurrentItem"
           ></vue-select>
 
         </div>
@@ -91,35 +88,35 @@ import {useLocationsStore} from '../store/locations'
 import {useWeatherStore} from '../store/weather'
 import {computed } from 'vue'
 
-const store = useLocationsStore()
+const locationsStore = useLocationsStore()
 const weatherStore = useWeatherStore()
-const header = computed(() => store.currentLocationName)
+const header = computed(() => locationsStore.currentLocationName)
 
 const unitsData = [
   {
     title: 'Metric',
-    si: 'С° / км/ч / мм',
+    si: 'С° / км/ч / мм рт.ст.',
     value: 'metric'
   },
   {
     title: 'Imperial',
-    si: 'F° / mph / inHg',
+    si: 'F° / mph / hPa',
     value: 'imperial'
   },
   {
     title: 'Standard',
-    si: 'K° / mph / inHg',
+    si: 'K° / mph / hPa',
     value: 'standard'
   },
 ]
 
 const units = computed({
   get() {
-    return store.currentUnits
+    return locationsStore.currentUnits
   },
-  set(val) {
-    store.changeUnits(val)
-    weatherStore.weatherQueryDB(store.currentLocationCoords, val, true)
+  set(value) {
+    locationsStore.changeUnits(value)
+    weatherStore.weatherQueryDB(locationsStore.currentLocationCoords, value, true)
   }
 })
 

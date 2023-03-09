@@ -85,6 +85,7 @@ const changeTab = (idx: number): void => {
   min-height: var(--vh)
   background-position: center
   background-size: cover
+  background-color: #383838
   font-family: "Roboto", sans-serif
   font-size: 14px
   color: #fff

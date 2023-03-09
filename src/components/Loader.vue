@@ -40,7 +40,7 @@
   align-items: center
   width: 100vw
   height: 100vh
-  background-color: #000
+  background-color: #383838
   scrollbar-gutter: unset
   z-index: 999
 .loader-block

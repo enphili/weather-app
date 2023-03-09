@@ -55,6 +55,7 @@ export const useLocationsStore = defineStore('locations', () => {
     locations.value.forEach(loc => loc.current = false)
     locations.value[idx].current = true
     locations.value.sort((a, b) => a.current ? -1 : b.current ? 1 : 0)
+    setToStorage('weatherApp', locations.value)
   }
   
   const changeUnits = (unite: string) => {
