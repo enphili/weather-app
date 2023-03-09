@@ -7,7 +7,7 @@
     <div class="main-content__present-weather present-weather">
       <div class="main-content__temperature-wrapper temperature-wrapper">
         <span class="main-content__today-temperature today-temperature">{{ temp }}&deg;</span>
-        <i class="wi wi-night-sleet main-weather-icon"></i>
+        <i class="wi main-weather-icon" :class="`wi-owm-${iconCode}`"></i>
       </div>
       <p class="main-content__weather-text weather-text">{{ weatherDescription }}</p>
       <p class="main-content__feels-like feels-like">Ощущается как: {{ feelsLike }}&deg;</p>
@@ -21,6 +21,7 @@
       <div class="weather-parameters__extended-data extended-data">
         <i class="wi wi-humidity weather-parameters__extended-icon extended-icon"></i>
         <span class="extended-data__value">{{ humidity }}%</span>
+        <span class="extended-data__units"> </span>
       </div>
       <div class="weather-parameters__extended-data extended-data">
         <i class="wi wi-strong-wind weather-parameters__extended-icon extended-icon"></i>
@@ -59,7 +60,7 @@ const weatherDescription = computed(() => {
 const feelsLike = computed(() => Math.round(weather.value?.main?.feels_like ?? 0))
 const pressure = computed(() => {
   const data = Math.round(weather.value?.main?.pressure ?? 730)
-  return locStore.currentUnits === 'metric' ? data * 0.75 : data
+  return locStore.currentUnits === 'metric' ? Math.round(data * 0.75) : data
 })
 const whatIsUnitPressure = computed(() => locStore.currentUnits === 'metric' ? 'мм рт.ст.' : 'гПа')
 const humidity = computed(() => weather.value?.main?.humidity ?? 0)
@@ -75,6 +76,7 @@ const windDeg = computed(() => {
   const windDirection = Math.round(deg / 22.5)
   return directions[windDirection]
 })
+const iconCode = computed(() =>  weather.value?.weather?.[0]?.id ?? 200)
 
 </script>
 
