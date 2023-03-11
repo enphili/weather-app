@@ -46,6 +46,7 @@ import { onMounted, ref} from 'vue'
 import {Placemark} from "yandex-maps"
 import {useLocationsStore} from '../store/locations'
 import {useWeatherStore} from '../store/weather'
+import {useYandexWeatherStore} from '../store/yanweather'
 
 defineProps<{
   isShadow?: boolean,
@@ -78,6 +79,7 @@ const chooseLocation = async (e: MouseEvent, idx: number, coords: [number, numbe
   }
   store.changeCurrentLocation(idx)
   await useWeatherStore().weatherQueryDB(coords, store.currentUnits, true)
+  await useYandexWeatherStore().yanWeatherQuery(coords, true)
 }
 
 const addLocation = (): void => {

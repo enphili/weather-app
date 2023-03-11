@@ -29,7 +29,7 @@
         <span class="extended-data__units">{{ whatIsUnitWindSpeed }} ({{ windDeg }})</span>
       </div>
       <div class="weather-parameters__parameters-text">
-        <p class="parameters-text">Видимость: {{ visibility }}м</p>
+        <i class="wi wi-sunrise">: {{ sunrise }}</i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="wi wi-sunset">: {{ sunset }}</i>
       </div>
     </div>
   </div>
@@ -40,18 +40,22 @@ import Loader from './Loader.vue'
 import {useWeatherStore} from '../store/weather'
 import {computed, onMounted, ref} from 'vue'
 import {useLocationsStore} from '../store/locations'
+import {useYandexWeatherStore} from "../store/yanweather";
 
 const store = useWeatherStore()
 const locStore = useLocationsStore()
+const yanStore = useYandexWeatherStore()
 const isLoader = ref<boolean>(false)
 
 onMounted(async () => {
   isLoader.value = true
   await store.weatherQueryDB(locStore.currentLocationCoords, locStore.currentUnits,false)
+  await yanStore.yanWeatherQuery(locStore.currentLocationCoords, false)
   isLoader.value = false
 })
 
 const weather = computed(() => store.getSingleWeather)
+const yanWeather = computed(() => yanStore.getYanWeather)
 const temp = computed(() => Math.round(weather.value?.main?.temp ?? 0))
 const weatherDescription = computed(() => {
   const str = weather.value?.weather?.[0]?.description ?? 'нет данных'
@@ -69,14 +73,15 @@ const windSpeed = computed(() => {
   return Math.round(speed)
 })
 const whatIsUnitWindSpeed = computed(() => locStore.currentUnits === 'metric' ? 'м/с' : 'mph')
-const visibility = computed(() => weather.value?.visibility ?? 0)
 const windDeg = computed(() => {
   const deg = weather.value?.wind?.deg ?? 0
   const directions = ['С', 'ССВ', 'СВ', 'ВВС', 'В', 'ВЮВ', 'ЮВ', 'ЮЮВ', 'Ю', 'ЮЮЗ', 'ЮЗ', 'ЗЮЗ', 'З', 'ЗСЗ', 'СЗ', 'ССЗ']
   const windDirection = Math.round(deg / 22.5)
   return directions[windDirection]
 })
-const iconCode = computed(() =>  weather.value?.weather?.[0]?.id ?? 200)
+const iconCode = computed(() => weather.value?.weather?.[0]?.id ?? 200)
+const sunrise = computed(() => yanWeather.value?.forecast?.sunrise ?? '00:00')
+const sunset = computed(() => yanWeather.value?.forecast?.sunset ?? '00:00')
 
 </script>
 
@@ -126,10 +131,10 @@ const iconCode = computed(() =>  weather.value?.weather?.[0]?.id ?? 200)
 .weather-parameters
   display: grid
   grid-template-columns: repeat(3, 1fr)
-  grid-row-gap: 24px
+  grid-row-gap: 20px
   &__parameters-text
     grid-column: 1/ -1
-    margin: 0 auto
+    margin: 0 auto 20px auto
 .extended-data
   display: flex
   flex-direction: column

@@ -2,17 +2,21 @@
   <div class="weather-app__main-content main-content main-content--fill-white">
 
     <div class="date-block">
-      <span class="today">{{ 'Сегодня' }}</span>
-      <span class="todays-date">{{ '20 января' }}</span>
+      <span class="today">Сегодня</span>
+      <span class="todays-date">{{ new Date().toLocaleString().slice(0, 17) }}</span>
     </div>
 
     <div class="main-content__hourly-forecast hourly-forecast">
       <div class="certain-hour"
-           v-for="items in 5"
+           v-for="part in parts"
+           :key="part.part_name"
       >
-        <span class="certain-hour__temp">{{ '24' }}&deg;</span>
-        <i class="wi wi-night-sleet certain-hour__icon"></i>
-        <span class="certain-hour__time">{{ '13:00' }}</span>
+        <span class="certain-hour__temp">{{ part.temp_avg }}&deg;C</span>
+        <img
+          :src="`https://yastatic.net/weather/i/icons/funky/dark/${part.icon}.svg`"
+          class="certain-hour__icon"
+        >
+        <span class="certain-hour__time">{{ EPartName[part.part_name] }}</span>
       </div>
     </div>
 
@@ -39,6 +43,14 @@
 </template>
 
 <script setup lang="ts">
+import {useYandexWeatherStore} from '../store/yanweather'
+import {computed} from 'vue'
+import {EPartName} from '../types/appTypes'
+
+const yanStore = useYandexWeatherStore()
+const weather = computed(() => yanStore.getYanWeather)
+
+const parts = computed(() => weather.value?.forecast?.parts ?? [])
 
 </script>
 
@@ -62,15 +74,15 @@
   color: rgba(0,0,0,0.5)
 .hourly-forecast
   display: grid
-  grid-template-columns: repeat(5, 1fr)
+  grid-template-columns: 1fr 1fr
 .certain-hour
   display: flex
   flex-direction: column
   align-items: center
   &__icon
-    margin-top: 5px
-    margin-bottom: 15px
-    font-size: 22px
+    margin-top: 2px
+    margin-bottom: 7px
+    width: 40px
   &__time
     font-size: 10px
     color: rgba(0,0,0,0.5)
