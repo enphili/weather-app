@@ -12,8 +12,8 @@
           <span class="setting-point__setting-description setting-description">Текущее место - {{ header }}</span>
         </div>
         <div class="setting-point__action-button action-button">
-          <label class="switch" for="notificatons">
-            <input type="checkbox" id="notificatons" />
+          <label class="switch" for="notifications">
+            <input type="checkbox" id="notifications" />
             <div class="slider round"></div>
           </label>
         </div>
@@ -25,8 +25,8 @@
           <span class="setting-point__setting-description setting-description">Погода в текущем местоположении</span>
         </div>
         <div class="setting-point__action-button action-button">
-          <label class="switch" for="followme">
-            <input type="checkbox" id="followme" />
+          <label class="switch" for="follow-me">
+            <input type="checkbox" id="follow-wme" />
             <div class="slider round"></div>
           </label>
         </div>

@@ -15,7 +15,15 @@
            v-for="part in parts"
            :key="part.part_name"
       >
-        <span class="certain-hour__temp">{{ part.temp_avg }}&deg;C</span>
+        <span class="certain-hour__temp">
+          {{ units === 'metric'
+          ? Math.round(part.temp_avg)
+          : units === 'standard'
+            ? Math.round(part.temp_avg + 273,15)
+            : Math.round(part.temp_avg * 9/5 + 32) }}
+          &deg;
+          {{ units === 'metric' ? 'С' : units === 'standard' ? 'K' : 'F' }}
+        </span>
         <img
           :src="`https://yastatic.net/weather/i/icons/funky/dark/${part.icon}.svg`"
           class="certain-hour__icon"
@@ -73,14 +81,14 @@ const isLoader = ref<boolean>(false)
 const weather = computed(() => yanStore.getYanWeather)
 const parts = computed(() => weather.value?.forecast?.parts ?? [])
 const coords = locationStore.currentLocationCoords
-const units = locationStore.currentUnits
+const units = computed(() => locationStore.currentUnits)
 const forecastList = computed(() => forecastStore.getForecastDayChunk)
 const arrMaxIndex = computed(() => forecastList.value.map(el => el.reduce((a, c, i) => el[a].main.temp > c.main.temp ? a : i, 0)))
 const arrMinIndex = computed(() => forecastList.value.map(el => el.reduce((a, c, i) => el[a].main.temp < c.main.temp ? a : i, 0)))
 
 onMounted(async () => {
   isLoader.value = true
-  await forecastStore.getForecastFromApi(coords, units, false)
+  await forecastStore.getForecastFromApi(coords, units.value, false)
   isLoader.value = false
 })
 
