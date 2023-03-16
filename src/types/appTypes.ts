@@ -88,6 +88,16 @@ export enum EPartName {
   evening = 'вечером'
 }
 
+export enum EDays {
+  'Воскресенье',
+  'Понедельник',
+  'Вторник',
+  'Среда',
+  'Четверг',
+  'Пятница',
+  'Суббота'
+}
+
 type TParts = {
   part_name: EPartName,
   temp_min: number,
@@ -144,7 +154,7 @@ type TForecastWind = {
   gust: number
 }
 
-type TForecastList = {
+export type TForecastList = {
   dt: number,
   main: TForecastMain,
   weather: TWeather,

@@ -62,20 +62,21 @@
       </div>
 
       <div class="main-content__setting-point setting-point">
+
         <div class="setting-point__description description">
           <span class="setting-point__setting-name setting-name">Избранные локаций</span>
           <span class="setting-point__setting-description setting-description">Максимальное количество локаций которые можно добавить в избранное</span>
         </div>
-        <div class="setting-point__action-button action-button">
 
+        <div class="setting-point__action-button action-button">
           <vue-select
             :is-placeholder-need="false"
             :show-arrow-down="false"
             :data="locationsStore.selectData"
             :selected-item="locationsStore.selectCurrentItem"
           ></vue-select>
-
         </div>
+
       </div>
     </div>
 
@@ -87,9 +88,11 @@ import VueSelect from '../plugins/vue-select/VueSelect.vue'
 import {useLocationsStore} from '../store/locations'
 import {useWeatherStore} from '../store/weather'
 import {computed } from 'vue'
+import {useForecastStore} from '../store/forecast'
 
 const locationsStore = useLocationsStore()
 const weatherStore = useWeatherStore()
+const forecastStore = useForecastStore()
 const header = computed(() => locationsStore.currentLocationName)
 
 const unitsData = [
@@ -117,6 +120,7 @@ const units = computed({
   set(value) {
     locationsStore.changeUnits(value)
     weatherStore.weatherQueryDB(locationsStore.currentLocationCoords, value, true)
+    forecastStore.getForecastFromApi(locationsStore.currentLocationCoords, value, true)
   }
 })
 

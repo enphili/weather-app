@@ -4,6 +4,7 @@ import { responseHeaders } from './middlewares'
 import { handleError, ErrorHandler } from './errorHandler'
 const openWeather = require('./routes/openweathermap')
 const yandexWeather = require('./routes/yandexweatherapi')
+const forecastWeather = require('./routes/forecastweather')
 
 dotenv.config()
 
@@ -15,6 +16,7 @@ app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 app.use(openWeather)
 app.use(yandexWeather)
+app.use(forecastWeather)
 
 app.use((err: ErrorHandler, req: Request, res: Response, next: NextFunction) => handleError(err, res))
 
