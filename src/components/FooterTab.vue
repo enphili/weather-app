@@ -9,7 +9,7 @@
 
 <script setup lang="ts">
 
-const props = defineProps<{
+defineProps<{
   title: string,
   isActive?: boolean,
 }>()
@@ -26,14 +26,18 @@ const props = defineProps<{
     padding: 9px 0
     border: none
     font-size: 12px
-    color: rgba(0,0,0,0.5)
-    background-color: #f1f5f6
+    color: var(--fot-nav-btn-color)
+    background-color: var(--fot-nav-btn-bgc)
     overflow: hidden
     cursor: pointer
+    transition: var(--transition)
     & svg
-      fill: rgba(0,0,0,0.5)
+      fill: var(--fot-nav-btn-color)
+      transition: var(--transition)
 .button--active
-  color: #FF5722
+  color: var(--accent-color)
+  transition: var(--transition)
   &  svg
-    fill: #FF5722
+    fill: var(--accent-color)
+    transition: var(--transition)
 </style>

@@ -109,7 +109,7 @@ $height: 33px
       display: block
       z-index: 91
   &__input
-    border: 3px solid rgba(34, 31, 31, 0.26)
+    border: 3px solid var(--switch-bgc)
     border-radius: 5px
     height: $height
     display: flex
@@ -125,10 +125,10 @@ $height: 33px
     display: none
     max-height: calc($height * 5)
     overflow-y: auto
-    border: 3px solid rgba(34, 31, 31, 0.26)
+    border: 3px solid var(--switch-bgc)
     border-radius: 5px
-    background-color: #fff
-    box-shadow: 2px -3px 5px rgba(0, 0, 0, 0.3)
+    background-color: var(--content-bgc)
+    box-shadow: 2px -3px 5px var(--dropdown-shadow-color)
     z-index: 99
   &__list
     padding: 0
@@ -146,11 +146,11 @@ $height: 33px
     justify-content: center
     align-items: center
     padding: 6px
-    border-bottom: 1px solid rgba(34, 31, 31, 0.26)
+    border-bottom: 1px solid var(--switch-bgc)
     &.selected
-      background-color: rgba(255, 87, 34, 0.5)
+      background-color: var(--sinput-checked-bgc)
     &:hover
-      background-color: #eee
+      background-color: var(--select-hover)
       cursor: pointer
       transition: 0.15s background-color ease-in
 .arrow-svg--down, .arrow-svg--up

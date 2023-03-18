@@ -35,9 +35,10 @@ import Weather from './components/Weather.vue'
 import Forecast from './components/Forecast.vue'
 import Settings from './components/Settings.vue'
 import backgroundUrl from './assets/img/clear_night.webp'
-import {computed, ref} from 'vue'
+import {computed, onMounted, ref} from 'vue'
 import type { Component } from 'vue'
 import {useLocationsStore} from './store/locations'
+import {getThemeMode} from './utils/getfromstorage'
 
 const store = useLocationsStore()
 const currentTab = ref<number>(0)
@@ -66,6 +67,15 @@ const menuItems: {component: Component, title: string, svg: string}[] = [
 ]
 let header = computed(() => store.currentLocationName)
 
+onMounted(() => {
+  const isDark = getThemeMode('weatherAppSettings')
+  if (isDark) {
+    document.documentElement.classList.add('dark')
+  } else {
+    document.documentElement.classList.add('light')
+  }
+})
+
 const changeTab = (idx: number): void => {
   currentTab.value = idx
   if (idx === menuItems.length - 1) {
@@ -88,7 +98,7 @@ const changeTab = (idx: number): void => {
   background-color: #383838
   font-family: "Roboto", sans-serif
   font-size: 14px
-  color: #fff
+  color: var(--wa-color)
 .weather-app__title
   display: none
 .footer-nav
@@ -98,7 +108,7 @@ const changeTab = (idx: number): void => {
   grid-template-columns: repeat(3, 1fr)
   width: 100%
   &--shadow
-    box-shadow: 0 0 8px rgba(0, 0, 0, 0.12)
+    box-shadow: var(--nav-shadow)
 @media only screen and (min-width: 768px)
   .weather-app
     max-width: 480px

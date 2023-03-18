@@ -40,7 +40,7 @@ import Loader from './Loader.vue'
 import {useWeatherStore} from '../store/weather'
 import {computed, onMounted, ref} from 'vue'
 import {useLocationsStore} from '../store/locations'
-import {useYandexWeatherStore} from "../store/yanweather";
+import {useYandexWeatherStore} from '../store/yanweather'
 
 const store = useWeatherStore()
 const locStore = useLocationsStore()
@@ -82,7 +82,6 @@ const windDeg = computed(() => {
 const iconCode = computed(() => weather.value?.weather?.[0]?.id ?? 200)
 const sunrise = computed(() => yanWeather.value?.forecast?.sunrise ?? '00:00')
 const sunset = computed(() => yanWeather.value?.forecast?.sunset ?? '00:00')
-
 </script>
 
 <style lang="sass">

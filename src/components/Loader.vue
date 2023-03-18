@@ -40,7 +40,8 @@
   align-items: center
   width: 100vw
   height: 100vh
-  background-color: #383838
+  background-color: var(--body-bgc)
+  transition: var(--transition)
   scrollbar-gutter: unset
   z-index: 999
 .loader-block

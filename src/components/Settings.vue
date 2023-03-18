@@ -8,12 +8,15 @@
     <div>
       <div class="main-content__setting-point setting-point">
         <div class="setting-point__description description">
-          <span class="setting-point__setting-name setting-name">Уведомления</span>
+          <div class="pro-mode-wrap">
+            <span class="setting-point__setting-name setting-name">Уведомления</span>
+            <span v-if="!isProMode" class="pro-mode">pro</span>
+          </div>
           <span class="setting-point__setting-description setting-description">Текущее место - {{ header }}</span>
         </div>
         <div class="setting-point__action-button action-button">
           <label class="switch" for="notifications">
-            <input type="checkbox" id="notifications" />
+            <input type="checkbox" id="notifications" :disabled="!isProMode"/>
             <div class="slider round"></div>
           </label>
         </div>
@@ -21,12 +24,15 @@
 
       <div class="main-content__setting-point setting-point">
         <div class="setting-point__description description">
-          <span class="setting-point__setting-name setting-name">Ослеживание</span>
+          <div class="pro-mode-wrap">
+            <span class="setting-point__setting-name setting-name">Ослеживание</span>
+            <span v-if="!isProMode" class="pro-mode">pro</span>
+          </div>
           <span class="setting-point__setting-description setting-description">Погода в текущем местоположении</span>
         </div>
         <div class="setting-point__action-button action-button">
           <label class="switch" for="follow-me">
-            <input type="checkbox" id="follow-wme" />
+            <input type="checkbox" id="follow-me" :disabled="!isProMode"/>
             <div class="slider round"></div>
           </label>
         </div>
@@ -78,6 +84,24 @@
         </div>
 
       </div>
+
+      <div class="main-content__setting-point setting-point">
+        <div class="setting-point__description description">
+          <span class="setting-point__setting-name setting-name">Темный режим</span>
+          <span class="setting-point__setting-description setting-description">Выбрать темную или светлую тему приложения</span>
+        </div>
+        <div class="setting-point__action-button action-button">
+          <label class="switch" for="dark-mode">
+            <input
+              type="checkbox"
+              id="dark-mode"
+              v-model="darkMode"
+            />
+            <div class="slider round"></div>
+          </label>
+        </div>
+      </div>
+
     </div>
 
   </div>
@@ -87,14 +111,15 @@
 import VueSelect from '../plugins/vue-select/VueSelect.vue'
 import {useLocationsStore} from '../store/locations'
 import {useWeatherStore} from '../store/weather'
-import {computed } from 'vue'
+import {computed, ref} from 'vue'
 import {useForecastStore} from '../store/forecast'
+import {getThemeMode, setWeatherSetting} from '../utils/getfromstorage'
 
 const locationsStore = useLocationsStore()
 const weatherStore = useWeatherStore()
 const forecastStore = useForecastStore()
 const header = computed(() => locationsStore.currentLocationName)
-
+const isProMode = ref(false)
 const unitsData = [
   {
     title: 'Metric',
@@ -112,7 +137,6 @@ const unitsData = [
     value: 'standard'
   },
 ]
-
 const units = computed({
   get() {
     return locationsStore.currentUnits
@@ -121,6 +145,22 @@ const units = computed({
     locationsStore.changeUnits(value)
     weatherStore.weatherQueryDB(locationsStore.currentLocationCoords, value, true)
     forecastStore.getForecastFromApi(locationsStore.currentLocationCoords, value, true)
+  }
+})
+
+const darkMode = computed({
+  get(): boolean {
+    return getThemeMode('weatherAppSettings')
+  },
+  set(value: boolean) {
+    setWeatherSetting('weatherAppSettings', 'idDark', value)
+    if (value) {
+      document.documentElement.classList.remove('light')
+      document.documentElement.classList.add('dark')
+    } else {
+      document.documentElement.classList.remove('dark')
+      document.documentElement.classList.add('light')
+    }
   }
 })
 
@@ -142,21 +182,35 @@ const units = computed({
 .description
   display: flex
   flex-direction: column
+  align-items: flex-start
+.pro-mode
+  position: absolute
+  top: -6px
+  margin-left: 5px
+  padding: 2px 7px
+  border-radius: 10px
+  background-color: var(--accent-color)
+  font-size: 10px
+  color: var(--wa-color)
+  transition: var(--transition)
+  &-wrap
+    position: relative
 .setting-name
   font-size: 16px
 .setting-description
-  color: rgba(0,0,0,0.5)
-.action-button
+  color: var(--content-txt-color-gray)
   display: flex
   flex-direction: column
   justify-content: center
   align-items: center
   margin-right: 7px
-  margin-left: auto
+  transition: var(--transition)
   &--radio
     justify-content: flex-end
 .mr17
+  margin-top: 22px
   margin-right: 17px
+  margin-left: 10px
 .switch
   position: relative
   display: inline-block
@@ -168,9 +222,9 @@ const units = computed({
   position: absolute
   inset: 0
   height: 15px
-  background-color: rgba(34, 31, 31, 0.26)
-  transition: .4s
+  background-color: var(--switch-bgc)
   cursor: pointer
+  transition: .4s, var(--transition)
 .slider:before
   position: absolute
   content: ""
@@ -178,14 +232,16 @@ const units = computed({
   bottom: -2px
   height: 20px
   width: 20px
-  background-color: #F1F1F1
-  box-shadow: 0 0 1px rgba(0, 0, 0, 0.12), 0 1px 1px rgba(0, 0, 0, 0.237602)
-  transition: .4s
+  background-color: var(--switch-before-bgc)
+  box-shadow: var(--switch-before-shadow)
+  transition: .4s, var(--transition)
 input:checked + .slider
-  background-color: rgba(255, 87, 34, 0.5)
+  background-color: var(--sinput-checked-bgc)
+  transition: var(--transition)
 input:checked + .slider:before
-  background-color: #FF5722
+  background-color: var(--accent-color)
   transform: translateX(26px)
+  transition: var(--transition)
 .slider.round
   border-radius: 34px
 .slider.round:before
@@ -202,9 +258,10 @@ label input[type="radio"]
   height: 8px
   border-radius: 50%
   outline-offset: 4px
-  outline: 3px solid rgba(34, 31, 31, 0.26)
+  outline: 3px solid var(--switch-bgc)
   margin-bottom: 10px
 label input[type="radio"]:checked~.design
-  outline-color: rgba(255, 87, 34, 0.5)
-  background: #FF5722
+  outline-color: var(--sinput-checked-bgc)
+  background: var(--accent-color)
+  transition: var(--transition)
 </style>

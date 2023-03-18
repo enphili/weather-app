@@ -176,8 +176,9 @@ onMounted(async () => {
     bottom: 16px
     right: 35px
   &--shadow
-    background-color: #673AB7
-    box-shadow: 0 0 4px rgba(0, 0, 0, 0.12), 0 4px 4px rgba(0, 0, 0, 0.24)
+    background-color: var(--nav-gbc)
+    box-shadow: var(--nav-shadow)
+    transition: var(--transition)
 .menu-button
   display: inline-block
   align-items: center
@@ -210,7 +211,8 @@ onMounted(async () => {
   display: none
   height: 100%
   width: 100%
-  background-color: #f1f5f6
+  background-color: var(--collapse-menu-bgc)
+  transition: var(--transition)
   &--active
     display: flex
     flex-direction: column
@@ -224,8 +226,8 @@ onMounted(async () => {
   padding-left: 16px
   font-size: 20px
   font-weight: bold
-  color: rgba(225,225,225,0.95)
-  background-color: #673AB7
+  background-color: var(--nav-gbc)
+  transition: var(--transition)
 .collapse-close, .add-location-btn
   display: block
   width: 56px
@@ -234,22 +236,25 @@ onMounted(async () => {
   cursor: pointer
 .collapse-close
   font-size: 20px
-  color: rgba(225,225,225,0.95)
-  background-color: #673AB7
+  color: var(--wa-color)
+  background-color: var(--nav-gbc)
+  transition: var(--transition)
 .add-location-btn
   border-radius: 50%
   padding: 0
   line-height: 56px
   font-size: 32px
-  color: #fff
-  background-color: #FF5722
+  color: var(--wa-color)
+  background-color: var(--accent-color)
   box-shadow: 0 6px 6px rgba(0,0,0,0.24)
+  transition: var(--transition)
 .single-location
   display: flex
   align-items: center
   padding: 15px 15px
-  color: rgba(0,0,0,0.75)
+  color: var(--fot-nav-btn-color)
   cursor: pointer
+  transition: var(--transition)
   &__weather-icon
     margin-left: 0
     margin-right: 15px
@@ -265,7 +270,8 @@ onMounted(async () => {
   font-size: 13px
   line-height: 14px
   overflow: hidden
-  color: rgba(0,0,0,1)
+  color: var(--font-collor-default)
+  transition: var(--transition)
 .mark-btn
   min-height: 16px
   min-width: 16px

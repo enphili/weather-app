@@ -19,9 +19,17 @@ export const getCurrentUnitsFromLS = (key: string): string => {
   return item ? JSON.parse(item).units ? JSON.parse(item).units : 'metric' : 'metric'
 }
 
-export const setWeatherSetting = (key: string, subKey: string, value: string | number) => {
+export const setWeatherSetting = (key: string, subKey: string, value: string | number | boolean) => {
   const item = localStorage.getItem(key)
   const data = item ? JSON.parse(item) : {}
   const obj = Object.assign(data, {[subKey]: value})
   localStorage.setItem(key, JSON.stringify(obj))
+}
+
+export const getThemeMode = (key: string): boolean => {
+  const item = localStorage.getItem(key)
+  if (item) {
+    return JSON.parse(item)?.idDark ?? false
+  }
+  return false
 }

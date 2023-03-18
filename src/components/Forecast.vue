@@ -7,7 +7,7 @@
 
     <div class="date-block">
       <span class="today">Сегодня</span>
-      <span class="todays-date">{{ new Date().toLocaleString().slice(0, 17) }}</span>
+      <span class="todays-date"></span>
     </div>
 
     <div class="main-content__hourly-forecast hourly-forecast">
@@ -19,7 +19,7 @@
           {{ units === 'metric'
           ? Math.round(part.temp_avg)
           : units === 'standard'
-            ? Math.round(part.temp_avg + 273,15)
+            ? Math.round(part.temp_avg + 273.15)
             : Math.round(part.temp_avg * 9/5 + 32) }}
           &deg;
           {{ units === 'metric' ? 'С' : units === 'standard' ? 'K' : 'F' }}
@@ -98,8 +98,9 @@ onMounted(async () => {
 .main-content
   &--fill-white
     padding: 46px 16px
-    background-color: #fff
-    color: black
+    background-color: var(--content-bgc)
+    color: var(--content-txt-color)
+    transition: var(--transition)
   &__hourly-forecast
     margin-top: 24px
     margin-bottom: 48px
@@ -111,7 +112,8 @@ onMounted(async () => {
   font-size: 20px
 .todays-date
   font-size: 12px
-  color: rgba(0,0,0,0.5)
+  color: var(--content-txt-color-gray)
+  transition: var(--transition)
 .hourly-forecast
   display: grid
   grid-template-columns: 1fr 1fr
@@ -126,14 +128,14 @@ onMounted(async () => {
   grid-row-end: span 2
   display: flex
   flex-direction: column
-  align-items: center
   &__icon
     margin-top: 2px
     margin-bottom: 7px
     width: 40px
   &__time
     font-size: 10px
-    color: rgba(0,0,0,0.5)
+    color: var(--content-txt-color-gray)
+    transition: var(--transition)
 .weekly-forecast
   display: grid
   grid-template-columns: 1fr 0.3fr 0.3fr 1.5fr 0.4fr
@@ -156,9 +158,11 @@ onMounted(async () => {
   font-size: 20px
   text-align: right
 .color-grey
-  color: rgba(0,0,0,0.5)
+  color: var(--content-txt-color-gray)
+  transition: var(--transition)
 .night-temp
   font-size: 20px
   text-align: right
-  color: rgba(0,0,0,0.5)
+  color: var(--content-txt-color-gray)
+  transition: var(--transition)
 </style>
