@@ -74,6 +74,10 @@ import {useForecastStore} from '../store/forecast'
 import {useLocationsStore} from '../store/locations'
 import Loader from './Loader.vue'
 
+defineProps<{
+  theme?: string
+}>()
+
 const yanStore = useYandexWeatherStore()
 const forecastStore = useForecastStore()
 const locationStore = useLocationsStore()

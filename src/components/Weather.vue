@@ -47,6 +47,10 @@ const locStore = useLocationsStore()
 const yanStore = useYandexWeatherStore()
 const isLoader = ref<boolean>(false)
 
+defineProps<{
+  theme?: string
+}>()
+
 onMounted(async () => {
   isLoader.value = true
   await store.weatherQueryDB(locStore.currentLocationCoords, locStore.currentUnits,false)

@@ -10,6 +10,7 @@
     <KeepAlive>
       <component
         :is="menuItems[currentTab].component"
+        :theme="theme"
       ></component>
     </KeepAlive>
 
@@ -38,7 +39,8 @@ import backgroundUrl from './assets/img/clear_night.webp'
 import {computed, onMounted, ref} from 'vue'
 import type { Component } from 'vue'
 import {useLocationsStore} from './store/locations'
-import {getThemeMode} from './utils/getfromstorage'
+import {getTheme} from './utils/getfromstorage'
+import {getMediaPreference} from './utils/getMediaPreference'
 
 const store = useLocationsStore()
 const currentTab = ref<number>(0)
@@ -66,15 +68,7 @@ const menuItems: {component: Component, title: string, svg: string}[] = [
   }
 ]
 let header = computed(() => store.currentLocationName)
-
-onMounted(() => {
-  const isDark = getThemeMode('weatherAppSettings')
-  if (isDark) {
-    document.documentElement.classList.add('dark')
-  } else {
-    document.documentElement.classList.add('light')
-  }
-})
+const theme = ref('')
 
 const changeTab = (idx: number): void => {
   currentTab.value = idx
@@ -84,6 +78,11 @@ const changeTab = (idx: number): void => {
     header = computed(() => store.currentLocationName)
   }
 }
+
+onMounted(() => {
+  theme.value = getTheme('weatherAppSettings') || getMediaPreference()
+  document.documentElement.classList.add(theme.value)
+})
 </script>
 
 <style lang="sass">

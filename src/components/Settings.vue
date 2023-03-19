@@ -113,7 +113,11 @@ import {useLocationsStore} from '../store/locations'
 import {useWeatherStore} from '../store/weather'
 import {computed, ref} from 'vue'
 import {useForecastStore} from '../store/forecast'
-import {getThemeMode, setWeatherSetting} from '../utils/getfromstorage'
+import { setWeatherSetting} from '../utils/getfromstorage'
+
+const props = defineProps<{
+  theme?: string
+}>()
 
 const locationsStore = useLocationsStore()
 const weatherStore = useWeatherStore()
@@ -150,10 +154,11 @@ const units = computed({
 
 const darkMode = computed({
   get(): boolean {
-    return getThemeMode('weatherAppSettings')
+    return props.theme === 'dark'
   },
   set(value: boolean) {
-    setWeatherSetting('weatherAppSettings', 'idDark', value)
+    const theme = value ? 'dark' : 'light'
+    setWeatherSetting('weatherAppSettings', 'theme', theme)
     if (value) {
       document.documentElement.classList.remove('light')
       document.documentElement.classList.add('dark')
