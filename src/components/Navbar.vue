@@ -1,159 +1,26 @@
 <template>
   <nav class="weather-app__navbar navbar" :class="{'navbar--shadow': isShadow}">
-    <button class="navbar__menu-button menu-button" @click.stop="isMenuActive = !isMenuActive"><span></span></button>
+    <button class="navbar__menu-button menu-button" @click.stop="isMenuActive = true"><span></span></button>
     <span class="navbar__location-name location-name">{{ header }}</span>
-    <div :class="[{'collapse-menu--active': isMenuActive}, 'navbar__collapse-menu', 'collapse-menu']">
-      <div class="navbar__collapse-header collapse-header">
-        <span class="navbar__collapse-title collapse-title">Избранные локации</span>
-        <button class="navbar__collapse-close collapse-close" @click.stop="isMenuActive = !isMenuActive">&#10006;</button>
-      </div>
-      <div class="navbar__favorite-locations favorite-locations">
 
-        <div
-          class="favorite-locations__single-location single-location"
-          v-for="(loc, index) in locations"
-          :key="loc.name"
-          @click="chooseLocation($event, index, loc.coords)"
-        >
-          <span class="single-location__temperature temperature">{{ '+26' }}&deg;</span>
-          <i class="wi wi-night-sleet single-location__weather-icon weather-icon"></i>
-          <span class="single-location__location-text location-text">{{ loc.name }}</span>
-          <button
-            :class="[loc.current ? 'mark-btn--location' : 'mark-btn--remove', 'single-location__mark-btn', 'mark-btn']"
-            @click="store.removeOneLocation(loc.current, index)"
-          ></button>
-        </div>
-
-      </div>
-      <div class="empty-block" @click.stop="isMenuActive = !isMenuActive"></div>
-
-      <div class="navbar__collapse-menu collapse-menu mapping" :class="{'collapse-menu--active': showMap}">
-        <div class="navbar__collapse-header collapse-header">
-          <span class="navbar__collapse-title collapse-title">Выбор местоположения</span>
-          <button class="navbar__collapse-close collapse-close" @click="addLocation">&#10006;</button>
-        </div>
-        <div id="map" ref="map" class="yandex-container"></div>
-      </div>
-
-      <button class="navbar__add-location-btn add-location-btn" @click="showMap = true">+</button>
-    </div>
+    <Suspense>
+      <favorite-locations
+        v-model:menuActive="isMenuActive"
+      />
+    </Suspense>
   </nav>
 </template>
 
 <script setup lang="ts">
-import { loadYmap } from 'vue-yandex-maps'
-import { onMounted, ref} from 'vue'
-import {Placemark} from "yandex-maps"
-import {useLocationsStore} from '../store/locations'
-import {useWeatherStore} from '../store/weather'
-import {useYandexWeatherStore} from '../store/yanweather'
+import { ref} from 'vue'
+import FavoriteLocations from './FavoriteLocations.vue'
 
 defineProps<{
   isShadow?: boolean,
   header: string,
 }>()
 
-const store = useLocationsStore()
-const map = ref<HTMLElement | null>(null)
-let isMenuActive = ref<boolean>(false)
-let showMap = ref<boolean>(false)
-const mapSetting: {
-  apiKey: string
-  lang: string
-  debug?: boolean
-  version?: string
-} = {
-  apiKey: import.meta.env.VITE_YANDEX_API_KEY,
-  lang: 'ru_RU',
-  debug: false,
-  version: '2.1'
-}
-const isChoose = ref<boolean>(false)
-const coordinates = ref<[number, number]>([56.838441, 60.603436]) // начальные координаты
-const iconCaption = ref<string>('')
-const locations = store.getLocations
-
-const chooseLocation = async (e: MouseEvent, idx: number, coords: [number, number]) => {
-  if (e.target instanceof HTMLElement) {
-    if (e.target.tagName === 'BUTTON') return
-  }
-  store.changeCurrentLocation(idx)
-  await useWeatherStore().weatherQueryDB(coords, store.currentUnits, true)
-  await useYandexWeatherStore().yanWeatherQuery(coords, true)
-}
-
-const addLocation = (): void => {
-  showMap.value = !showMap.value
-  if (!isChoose.value) return
-  store.addNewLocation(iconCaption.value, coordinates.value)
-}
-
-onMounted(async () => {
-  await loadYmap(mapSetting)
-  await ymaps.ready(() => {
-    if (!map.value) return
-    let myPlacemark: Placemark
-
-    const myMap = new ymaps.Map(map.value, {
-      center: coordinates.value,
-      controls: ['zoomControl'],
-      zoom: 10
-    },
-      {
-      yandexMapDisablePoiInteractivity: true,
-      yandexMapAutoSwitch: false,
-      suppressObsoleteBrowserNotifier: true,
-      suppressMapOpenBlock: true,
-    })
-
-    const createPlacemark = (coords: [number, number]) => {
-      return new ymaps.Placemark(coords, {
-        iconCaption: 'поиск...'
-      }, {
-        preset: 'islands#violetDotIconWithCaption',
-        draggable: true
-      })
-    }
-
-    const getAddress = (coords: [number, number]) => {
-      myPlacemark.properties.set('iconCaption', 'поиск...')
-      ymaps.geocode(coords).then(function (res) {
-        const firstGeoObject = res.geoObjects.get(0)
-        iconCaption.value = [
-          firstGeoObject.getLocalities().length ? firstGeoObject.getLocalities() : firstGeoObject.getAdministrativeAreas()
-        ].filter(Boolean).join(', ')
-        myPlacemark.properties.set('iconCaption', iconCaption.value)
-      })
-    }
-
-    const searchControl = new ymaps.control.SearchControl({
-      options: {
-        provider: "yandex#map",
-        noPlacemark: true
-      }
-    })
-
-    myMap.events.add('click', function (e) {
-      coordinates.value = e.get('coords')
-      if (myPlacemark) {
-        myPlacemark.geometry?.setCoordinates(coordinates.value)
-      }
-      else {
-        myPlacemark = createPlacemark(coordinates.value)
-        myMap.geoObjects.add(myPlacemark)
-        myPlacemark.events.add('dragend', function () {
-          getAddress(myPlacemark.geometry?.getCoordinates() as [number, number])
-        })
-      }
-      getAddress(coordinates.value)
-      isChoose.value = true
-    })
-
-    myMap.controls.add(searchControl)
-  })
-
-})
-
+const isMenuActive = ref<boolean>(false)
 </script>
 
 <style lang="sass">
@@ -226,6 +93,7 @@ onMounted(async () => {
   padding-left: 16px
   font-size: 20px
   font-weight: bold
+  user-select: none
   background-color: var(--nav-gbc)
   transition: var(--transition)
 .collapse-close, .add-location-btn
@@ -256,14 +124,16 @@ onMounted(async () => {
   cursor: pointer
   transition: var(--transition)
   &__weather-icon
-    margin-left: 0
+    width: 20px
+    margin-left: 5px
     margin-right: 15px
   &__location-text
     margin-right: 10px
   &__mark-btn
+    width: 16px
     margin-left: auto
 .temperature
-  width: 40px
+  min-width: 40px
   font-size: 18px
   font-weight: bold
 .location-text

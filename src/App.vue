@@ -2,10 +2,10 @@
   <div class="weather-app" :style="{ backgroundImage: `url(${backgroundUrl})` }">
     <h1 class="weather-app__title">Приложение погоды</h1>
 
-    <Navbar
-      :is-shadow="currentTab !== 0"
-      :header="header"
-    ></Navbar>
+      <Navbar
+        :is-shadow="currentTab !== 0"
+        :header="header"
+      ></Navbar>
 
     <KeepAlive>
       <component

@@ -7,7 +7,7 @@
 
     <div class="date-block">
       <span class="today">Сегодня</span>
-      <span class="todays-date"></span>
+      <span class="todays-date">{{ new Date().toLocaleDateString('ru-RU', {day: 'numeric', month: 'long'})}}</span>
     </div>
 
     <div class="main-content__hourly-forecast hourly-forecast">
@@ -25,6 +25,7 @@
           {{ units === 'metric' ? 'С' : units === 'standard' ? 'K' : 'F' }}
         </span>
         <img
+          v-if="part.icon"
           :src="`https://yastatic.net/weather/i/icons/funky/dark/${part.icon}.svg`"
           class="certain-hour__icon"
           alt="weather-icon"
@@ -39,27 +40,32 @@
            :key="idx"
       >
         <div class="certain-hour">
-          <span
-            class="weekly-forecast__day"
-          >
+          <span class="weekly-forecast__day">
             {{ idx === 0 ? 'завтра' : EDays[new Date(item[0].dt_txt).getDay()] }}
           </span>
-          <span
-            v-if="idx !== 0"
-            class="weekly-forecast__day"
-          >
+          <span v-if="idx !== 0" class="weekly-forecast__day">
             {{ new Date(item[0].dt_txt).toLocaleDateString('ru-RU', {day: 'numeric', month: 'long'}) }}
           </span>
         </div>
 
         <i class="wi wi-day-sunny mt-auto"></i>
-        <i class="wi mt-auto" :class="`wi-owm-${item[arrMaxIndex[idx]]?.weather[0].id}`"></i>
-        <span class="weekly-forecast__weather-conditions ml10">{{ item[arrMaxIndex[idx]]?.weather[0].description }}</span>
+        <i
+          class="wi mt-auto"
+          :class="item[arrMaxIndex[idx]]?.weather[0].id ? `wi-owm-${item[arrMaxIndex[idx]]?.weather[0].id}` : 'wi-na'"
+        ></i>
+        <span class="weekly-forecast__weather-conditions ml10">
+          {{ item[arrMaxIndex[idx]]?.weather[0]?.description ? item[arrMaxIndex[idx]]?.weather[0].description : 'нет данных' }}
+        </span>
         <span class="day-temp">{{ Math.round(item[arrMaxIndex[idx]]?.main.temp) }}&deg;</span>
 
         <i class="wi wi-moon-alt-waxing-crescent-4 mt-auto color-grey"></i>
-        <i class="wi mt-auto color-grey" :class="`wi-owm-${item[arrMinIndex[idx]]?.weather[0].id}`"></i>
-        <span class="weekly-forecast__weather-conditions ml10 color-grey">{{ item[arrMinIndex[idx]]?.weather[0].description }}</span>
+        <i
+          class="wi mt-auto color-grey"
+          :class="item[arrMinIndex[idx]]?.weather[0].id ? `wi-owm-${item[arrMinIndex[idx]]?.weather[0].id}` : 'wi-na'"
+        ></i>
+        <span class="weekly-forecast__weather-conditions ml10 color-grey">
+          {{ item[arrMinIndex[idx]]?.weather[0]?.description ? item[arrMinIndex[idx]]?.weather[0].description : 'нет данных'}}
+        </span>
         <span class="night-temp">{{ Math.round(item[arrMinIndex[idx]]?.main.temp) }}&deg;</span>
       </div>
     </div>
@@ -87,8 +93,16 @@ const parts = computed(() => weather.value?.forecast?.parts ?? [])
 const coords = locationStore.currentLocationCoords
 const units = computed(() => locationStore.currentUnits)
 const forecastList = computed(() => forecastStore.getForecastDayChunk)
-const arrMaxIndex = computed(() => forecastList.value.map(el => el.reduce((a, c, i) => el[a].main.temp > c.main.temp ? a : i, 0)))
-const arrMinIndex = computed(() => forecastList.value.map(el => el.reduce((a, c, i) => el[a].main.temp < c.main.temp ? a : i, 0)))
+const arrMaxIndex = computed(() => {
+  return forecastList.value.map(el => {
+    return el.reduce((a, c, i) => el[a].main.temp > c.main.temp ? a : i, 0)
+  })
+})
+const arrMinIndex = computed(() => {
+  return forecastList.value.map(el => {
+    return el.reduce((a, c, i) => el[a].main.temp < c.main.temp ? a : i, 0)
+  })
+})
 
 onMounted(async () => {
   isLoader.value = true

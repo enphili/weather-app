@@ -7,26 +7,26 @@
     <div class="main-content__present-weather present-weather">
       <div class="main-content__temperature-wrapper temperature-wrapper">
         <span class="main-content__today-temperature today-temperature">{{ temp }}&deg;</span>
-        <i class="wi main-weather-icon" :class="`wi-owm-${iconCode}`"></i>
+        <i class="wi main-weather-icon" :class="iconCode"></i>
       </div>
       <p class="main-content__weather-text weather-text">{{ weatherDescription }}</p>
-      <p class="main-content__feels-like feels-like">Ощущается как: {{ feelsLike }}&deg;</p>
+      <p v-if="feelsLike" class="main-content__feels-like feels-like">Ощущается как: {{ feelsLike }}&deg;</p>
     </div>
     <div class="main-content__weather-parameters weather-parameters">
       <div class="weather-parameters__extended-data extended-data">
         <i class="wi wi-barometer weather-parameters__extended-icon extended-icon"></i>
         <span class="extended-data__value">{{ pressure }}</span>
-        <span class="extended-data__units">{{ whatIsUnitPressure }}</span>
+        <span v-if="pressure" class="extended-data__units">{{ whatIsUnitPressure }}</span>
       </div>
       <div class="weather-parameters__extended-data extended-data">
         <i class="wi wi-humidity weather-parameters__extended-icon extended-icon"></i>
-        <span class="extended-data__value">{{ humidity }}%</span>
-        <span class="extended-data__units"> </span>
+        <span class="extended-data__value">{{ humidity }}</span>
+        <span v-if="humidity" class="extended-data__units">%</span>
       </div>
       <div class="weather-parameters__extended-data extended-data">
         <i class="wi wi-strong-wind weather-parameters__extended-icon extended-icon"></i>
         <span class="extended-data__value">{{ windSpeed }}</span>
-        <span class="extended-data__units">{{ whatIsUnitWindSpeed }} ({{ windDeg }})</span>
+        <span v-if="windSpeed" class="extended-data__units">{{ whatIsUnitWindSpeed }} ({{ windDeg }})</span>
       </div>
       <div class="weather-parameters__parameters-text">
         <i class="wi wi-sunrise">: {{ sunrise }}</i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="wi wi-sunset">: {{ sunset }}</i>
@@ -42,40 +42,29 @@ import {computed, onMounted, ref} from 'vue'
 import {useLocationsStore} from '../store/locations'
 import {useYandexWeatherStore} from '../store/yanweather'
 
-const store = useWeatherStore()
-const locStore = useLocationsStore()
-const yanStore = useYandexWeatherStore()
-const isLoader = ref<boolean>(false)
-
 defineProps<{
   theme?: string
 }>()
 
-onMounted(async () => {
-  isLoader.value = true
-  await store.weatherQueryDB(locStore.currentLocationCoords, locStore.currentUnits,false)
-  await yanStore.yanWeatherQuery(locStore.currentLocationCoords, false)
-  isLoader.value = false
-})
-
+const store = useWeatherStore()
+const locStore = useLocationsStore()
+const yanStore = useYandexWeatherStore()
+const isLoader = ref<boolean>(false)
 const weather = computed(() => store.getSingleWeather)
 const yanWeather = computed(() => yanStore.getYanWeather)
-const temp = computed(() => Math.round(weather.value?.main?.temp ?? 0))
+const temp = computed(() => Math.round(weather.value?.main?.temp ?? NaN))
 const weatherDescription = computed(() => {
   const str = weather.value?.weather?.[0]?.description ?? 'нет данных'
   return str.charAt(0).toUpperCase() + str.slice(1)
 })
-const feelsLike = computed(() => Math.round(weather.value?.main?.feels_like ?? 0))
+const feelsLike = computed(() => Math.round(weather.value?.main?.feels_like))
 const pressure = computed(() => {
-  const data = Math.round(weather.value?.main?.pressure ?? 730)
+  const data = Math.round(weather.value?.main?.pressure)
   return locStore.currentUnits === 'metric' ? Math.round(data * 0.75) : data
 })
 const whatIsUnitPressure = computed(() => locStore.currentUnits === 'metric' ? 'мм рт.ст.' : 'гПа')
-const humidity = computed(() => weather.value?.main?.humidity ?? 0)
-const windSpeed = computed(() => {
-  const speed = weather.value?.wind?.speed ?? 0
-  return Math.round(speed)
-})
+const humidity = computed(() => weather.value?.main?.humidity ?? NaN)
+const windSpeed = computed(() => Math.round(weather.value?.wind?.speed))
 const whatIsUnitWindSpeed = computed(() => locStore.currentUnits === 'metric' ? 'м/с' : 'mph')
 const windDeg = computed(() => {
   const deg = weather.value?.wind?.deg ?? 0
@@ -83,9 +72,18 @@ const windDeg = computed(() => {
   const windDirection = Math.round(deg / 22.5)
   return directions[windDirection]
 })
-const iconCode = computed(() => weather.value?.weather?.[0]?.id ?? 200)
-const sunrise = computed(() => yanWeather.value?.forecast?.sunrise ?? '00:00')
-const sunset = computed(() => yanWeather.value?.forecast?.sunset ?? '00:00')
+const iconCode = computed(() => weather.value?.weather?.[0]?.id ? 'wi-owm-'+ weather.value?.weather?.[0]?.id : 'wi-na')
+const sunrise = computed(() => yanWeather.value?.forecast?.sunrise ?? 'н/д')
+const sunset = computed(() => yanWeather.value?.forecast?.sunset ?? 'н/д')
+
+onMounted(async () => {
+  isLoader.value = true
+  await store.weatherQueryDB(locStore.currentLocationCoords, locStore.currentUnits,false)
+  // FIXME включить эту функцию
+  // await yanStore.yanWeatherQuery(locStore.currentLocationCoords, false)
+  isLoader.value = false
+})
+
 </script>
 
 <style lang="sass">

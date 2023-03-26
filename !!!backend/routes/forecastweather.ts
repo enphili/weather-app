@@ -9,7 +9,7 @@ router.get('/api/forecast', async (req, res, next) => {
   try {
     const { lat, lon, units } = req.query
     const url = `?lat=${lat}&lon=${lon}&appid=${process.env.WA_API_KEY}&units=${units}&lang=ru`
-    const response = await api({url, method: 'get'})
+    const response = await api({url, method: 'GET'})
     res.status(200).json(response.data)
     next()
   }
@@ -23,4 +23,4 @@ router.get('/api/forecast', async (req, res, next) => {
   }
 })
 
-module.exports = router
+export default router

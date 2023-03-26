@@ -4,6 +4,7 @@ import App from './App.vue'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import { select } from './plugins/vue-select/select'
+import Notifications from '@kyvg/vue3-notification'
 import './assets/css/reset.css'
 import './assets/css/weather-icons.min.css'
 
@@ -25,5 +26,6 @@ app
   .use(pinia)
   .use(VueAxios, axios)
   .use(select)
+  .use(Notifications)
   .provide('axios', app.config.globalProperties.axios)
   .mount('#app')

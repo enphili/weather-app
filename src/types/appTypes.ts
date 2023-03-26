@@ -1,6 +1,13 @@
 type TCoordinates = {
+  lat: number,
   lon: number,
-  lat: number
+}
+
+type TUrl = {url: string}
+
+export type TTempAndIcon = {
+  temp: number,
+  icon: string
 }
 
 type TWeather = {
@@ -24,9 +31,7 @@ type TWind = {
   deg: number
 }
 
-type TClouds = {
-  all: number
-}
+type TClouds = {all: number}
 
 type TSystemData = {
   type: number,
@@ -58,11 +63,7 @@ export type TLocation = {
   current: boolean
 }
 
-type TInfo = {
-  lat: number,
-  lon: number,
-  url: string
-}
+type TInfo = TCoordinates & TUrl
 
 type TFact = {
   temp: number,

@@ -114,6 +114,7 @@ import {useWeatherStore} from '../store/weather'
 import {computed, ref} from 'vue'
 import {useForecastStore} from '../store/forecast'
 import { setWeatherSetting} from '../utils/getfromstorage'
+import {useTempsStore} from '../store/favoritelocationstemp'
 
 const props = defineProps<{
   theme?: string
@@ -122,6 +123,7 @@ const props = defineProps<{
 const locationsStore = useLocationsStore()
 const weatherStore = useWeatherStore()
 const forecastStore = useForecastStore()
+const tempsStore = useTempsStore()
 const header = computed(() => locationsStore.currentLocationName)
 const isProMode = ref(false)
 const unitsData = [
@@ -141,6 +143,7 @@ const unitsData = [
     value: 'standard'
   },
 ]
+
 const units = computed({
   get() {
     return locationsStore.currentUnits
@@ -149,6 +152,7 @@ const units = computed({
     locationsStore.changeUnits(value)
     weatherStore.weatherQueryDB(locationsStore.currentLocationCoords, value, true)
     forecastStore.getForecastFromApi(locationsStore.currentLocationCoords, value, true)
+    tempsStore.getSingleTempAndIcon(locationsStore.getLocations, value)
   }
 })
 

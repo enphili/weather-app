@@ -28,6 +28,7 @@ import { ref } from 'vue'
 import type { PropType } from 'vue'
 import {useLocationsStore} from '../../store/locations'
 import {beyondGuard} from '../../utils/preventArrayOverflow'
+import {useTempsStore} from '../../store/favoritelocationstemp'
 
 type TDate =  (number | string)[]
 
@@ -58,8 +59,8 @@ const props = defineProps({
   }
 })
 
-
 const store = useLocationsStore()
+const tempsStore = useTempsStore()
 const isOpen = ref<boolean>(false)
 const selectedId = ref(props.selectedItem)
 const currentValue = ref(props.isPlaceholderNeed ? props.placeholder : beyondGuard(props.data, props.selectedItem))
@@ -75,9 +76,11 @@ const selectItem = (value: string | number, idx: number) => {
     }
     store.changeSelectValue(idx, number)
     store.reduceLocationsLength(number)
+    tempsStore.reduceTempsLength(number)
   } else {
     store.changeSelectValue(idx, value)
     store.reduceLocationsLength(value)
+    tempsStore.reduceTempsLength(value)
   }
 }
 

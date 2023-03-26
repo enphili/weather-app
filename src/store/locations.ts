@@ -1,10 +1,8 @@
 import { defineStore } from 'pinia'
 import {computed, ref} from 'vue'
 import { beyondGuard } from '../utils/preventArrayOverflow'
-import {
-  getCurrentLimit, getCurrentUnitsFromLS, getFromStorage,
-  setToStorage, setWeatherSetting
-} from '../utils/getfromstorage'
+import { getCurrentLimit, getCurrentUnitsFromLS, getFromStorage,
+  setToStorage, setWeatherSetting } from '../utils/getfromstorage'
 import {TLocation} from '../types/appTypes'
 
 export const useLocationsStore = defineStore('locations', () => {

@@ -2,7 +2,7 @@
   "compilerOptions": {
     "module": "commonjs",
     "strict" : true,
-    "target": "ES2016",
+    "target": "ESNext",
     "sourceMap": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
@@ -10,6 +10,9 @@
     "outDir": "./dist",
     "types": [
         "node"
+    ],
+    "lib": [
+    
     ]
   },
   "exclude": [
