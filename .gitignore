@@ -28,3 +28,5 @@ dist-ssr
 backend/.env
 /weatherbackend/.env
 /!!!backend/
+\!!!backend/
+weatherbackend/.env
