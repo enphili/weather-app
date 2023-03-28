@@ -61,7 +61,7 @@ defineEmits(['update:menuActive'])
 const isLoader = ref<boolean>(false)
 const store = useLocationsStore()
 const tempsStore = useTempsStore()
-const locations = store.getLocations
+const locations = computed(() => store.getLocations)
 const showMap = ref<boolean>(false)
 const units = computed(() => store.currentUnits)
 const temps = computed(() => tempsStore.getTemps)
@@ -77,7 +77,7 @@ const mapSetting: {
   debug: false,
   version: '2.1'
 }
-const coordinates = ref<[number, number]>([56.838441, 60.603436]) // начальные координаты
+const coordinates = ref<[number, number]>([55.75417898652652,37.619532149780696]) // начальные координаты
 const iconCaption = ref<string>('')
 const isChoose = ref<boolean>(false)
 const { notify } = useNotification()
@@ -106,7 +106,7 @@ const addLocation = async (): Promise<void> => {
   showMap.value = !showMap.value
   store.addNewLocation(iconCaption.value, coordinates.value)
   isLoader.value = true
-  await tempsStore.getSingleTempAndIcon(locations, units.value)
+  await tempsStore.getSingleTempAndIcon(locations.value, units.value)
   await useForecastStore().getForecastFromApi(coordinates.value, units.value, true)
   await useWeatherStore().weatherQueryDB(coordinates.value, units.value,true)
   isLoader.value = false
@@ -150,6 +150,7 @@ onMounted(async () => {
       ymaps.geocode(coords).then(function (res) {
         const firstGeoObject = res.geoObjects.get(0)
         iconCaption.value = [
+          // @ts-ignore: error message
           firstGeoObject.getLocalities().length ? firstGeoObject.getLocalities() : firstGeoObject.getAdministrativeAreas()
         ].filter(Boolean).join(', ')
         myPlacemark.properties.set('iconCaption', iconCaption.value)
@@ -181,7 +182,7 @@ onMounted(async () => {
 
     myMap.controls.add(searchControl)
   })
-  await tempsStore.getSingleTempAndIcon(locations, units.value)
+  await tempsStore.getSingleTempAndIcon(locations.value, units.value)
   isLoader.value = false
 })
 

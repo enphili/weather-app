@@ -4,7 +4,7 @@
 
       <Navbar
         :is-shadow="currentTab !== 0"
-        :header="header"
+        :header="title"
       ></Navbar>
 
     <KeepAlive>
@@ -36,7 +36,7 @@ import Weather from './components/Weather.vue'
 import Forecast from './components/Forecast.vue'
 import Settings from './components/Settings.vue'
 import backgroundUrl from './assets/img/clear_night.webp'
-import {computed, onMounted, ref} from 'vue'
+import {computed, onMounted, ref, ComputedRef} from 'vue'
 import type { Component } from 'vue'
 import {useLocationsStore} from './store/locations'
 import {getTheme} from './utils/getfromstorage'
@@ -67,21 +67,23 @@ const menuItems: {component: Component, title: string, svg: string}[] = [
     '        </svg>'
   }
 ]
-let header = computed(() => store.currentLocationName)
+let title: ComputedRef<string> | string = ''
 const theme = ref('')
 
 const changeTab = (idx: number): void => {
   currentTab.value = idx
   if (idx === menuItems.length - 1) {
-    header = computed(() => 'Настройки')
+    title = 'Настройки'
   } else {
-    header = computed(() => store.currentLocationName)
+    title = store.currentLocationName
   }
 }
 
-onMounted(() => {
+onMounted(async (): Promise<void> => {
   theme.value = getTheme('weatherAppSettings') || getMediaPreference()
   document.documentElement.classList.add(theme.value)
+  title = computed(() => store.currentLocationName)
+  await store.getInitialLocations()
 })
 </script>
 

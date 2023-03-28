@@ -17,7 +17,7 @@ import FavoriteLocations from './FavoriteLocations.vue'
 
 defineProps<{
   isShadow?: boolean,
-  header: string,
+  header?: string,
 }>()
 
 const isMenuActive = ref<boolean>(false)

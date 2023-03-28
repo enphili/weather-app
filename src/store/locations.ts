@@ -10,15 +10,19 @@ export const useLocationsStore = defineStore('locations', () => {
   const selectData =[5,10,15,20]
   const selectCurrentItem = getCurrentLimit('weatherAppSettings')
   const selectCurrentValue = ref(beyondGuard(selectData, selectCurrentItem))
-  const locations = ref<TLocation[]>(getFromStorage('weatherApp'))
+  const locations = ref<TLocation[]>([])
   const currentUnits = ref(getCurrentUnitsFromLS('weatherAppSettings'))
   
   // getters
   const getLocations = computed(() => locations.value)
-  const currentLocationName = computed(() => locations.value[0].name)
-  const currentLocationCoords = computed(() => locations.value[0].coords)
+  const currentLocationName = computed(() => locations.value[0]?.name)
+  const currentLocationCoords = computed(() => locations.value[0]?.coords)
   
   // actions
+  const getInitialLocations = async () => {
+    locations.value = await getFromStorage('weatherApp')
+  }
+  
   const changeSelectValue = (index: number, value: number) => {
     selectCurrentValue.value = value
     setWeatherSetting('weatherAppSettings', 'curLimitLoc', index)
@@ -74,6 +78,7 @@ export const useLocationsStore = defineStore('locations', () => {
     currentLocationCoords,
     changeCurrentLocation,
     currentUnits,
-    changeUnits
+    changeUnits,
+    getInitialLocations,
   }
 })

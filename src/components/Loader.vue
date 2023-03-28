@@ -27,9 +27,7 @@
   </div>
 </template>
 
-<script>
-
-</script>
+<script setup lang="ts"></script>
 
 <style scoped lang="sass">
 .loader

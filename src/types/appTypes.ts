@@ -82,11 +82,11 @@ type TFact = {
   obs_time: number
 }
 
-export enum EPartName {
-  night = 'ночью',
-  morning = 'утром',
-  day = 'днём',
-  evening = 'вечером'
+export type EPartName = {
+  night: string,
+  morning: string,
+  day: string,
+  evening: string
 }
 
 export enum EDays {
@@ -100,7 +100,7 @@ export enum EDays {
 }
 
 type TParts = {
-  part_name: EPartName,
+  part_name: keyof EPartName,
   temp_min: number,
   temp_max: number,
   temp_avg: number,

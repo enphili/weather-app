@@ -1,8 +1,36 @@
 import {TLocation} from '../types/appTypes'
 
-export const getFromStorage = (key: string): [] => {
+const getLocationFromNavi = (): Promise<TLocation[]> => new Promise((resolve, reject) => {
+      navigator.geolocation.getCurrentPosition(
+        (position: GeolocationPosition) => {
+          const result: TLocation[] = [{
+            name: 'Ваше текущее местоположение',
+            coords: [position.coords.latitude, position.coords.longitude],
+            current: true
+          }]
+          resolve(result)
+        },
+        (error: GeolocationPositionError) => {
+          console.warn(`ERROR(${error.code}): ${error.message}`)
+          const result: TLocation[] = [{
+            name: 'Москва',
+            coords: [55.75417898652652,37.619532149780696],
+            current: true
+          }]
+          reject(result)
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 5000,
+          maximumAge: 10000,
+        }
+      )
+  })
+
+export const getFromStorage = async (key: string): Promise<TLocation[]> => {
   const item = localStorage.getItem(key)
-  return item ? JSON.parse(item) : []
+  if (item) return JSON.parse(item)
+  else return await getLocationFromNavi()
 }
 
 export const setToStorage = (key: string, arr: TLocation[]) => {

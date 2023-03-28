@@ -30,3 +30,4 @@ backend/.env
 /!!!backend/
 \!!!backend/
 weatherbackend/.env
+.vscode/

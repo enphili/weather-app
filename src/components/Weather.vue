@@ -76,10 +76,11 @@ const iconCode = computed(() => weather.value?.weather?.[0]?.id ? 'wi-owm-'+ wea
 const sunrise = computed(() => yanWeather.value?.forecast?.sunrise ?? 'н/д')
 const sunset = computed(() => yanWeather.value?.forecast?.sunset ?? 'н/д')
 
+
 onMounted(async () => {
   isLoader.value = true
+  await locStore.getInitialLocations()
   await store.weatherQueryDB(locStore.currentLocationCoords, locStore.currentUnits,false)
-  // FIXME включить эту функцию
   // await yanStore.yanWeatherQuery(locStore.currentLocationCoords, false)
   isLoader.value = false
 })

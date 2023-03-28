@@ -13,7 +13,7 @@
     <div class="main-content__hourly-forecast hourly-forecast">
       <div class="weather-today"
            v-for="part in parts"
-           :key="part.part_name"
+           :key="part.temp_avg"
       >
         <span class="certain-hour__temp">
           {{ units === 'metric'
@@ -30,7 +30,7 @@
           class="certain-hour__icon"
           alt="weather-icon"
         >
-        <span class="certain-hour__time">{{ EPartName[part.part_name] }}</span>
+        <span class="certain-hour__time">{{ daysTime[part.part_name] }}</span>
       </div>
     </div>
 
@@ -103,6 +103,12 @@ const arrMinIndex = computed(() => {
     return el.reduce((a, c, i) => el[a].main.temp < c.main.temp ? a : i, 0)
   })
 })
+const daysTime: EPartName = {
+  night: 'ночью',
+  morning: 'утром',
+  day: 'днём',
+  evening: 'вечером'
+}
 
 onMounted(async () => {
   isLoader.value = true
