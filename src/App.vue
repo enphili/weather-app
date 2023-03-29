@@ -4,7 +4,7 @@
 
       <Navbar
         :is-shadow="currentTab !== 0"
-        :header="title"
+        :isSettingActive="isSettingActive"
       ></Navbar>
 
     <KeepAlive>
@@ -36,13 +36,11 @@ import Weather from './components/Weather.vue'
 import Forecast from './components/Forecast.vue'
 import Settings from './components/Settings.vue'
 import backgroundUrl from './assets/img/clear_night.webp'
-import {computed, onMounted, ref, ComputedRef} from 'vue'
+import { onMounted, ref } from 'vue'
 import type { Component } from 'vue'
-import {useLocationsStore} from './store/locations'
 import {getTheme} from './utils/getfromstorage'
 import {getMediaPreference} from './utils/getMediaPreference'
 
-const store = useLocationsStore()
 const currentTab = ref<number>(0)
 const menuItems: {component: Component, title: string, svg: string}[] = [
   {
@@ -67,23 +65,18 @@ const menuItems: {component: Component, title: string, svg: string}[] = [
     '        </svg>'
   }
 ]
-let title: ComputedRef<string> | string = ''
+const isSettingActive = ref<boolean>(false)
 const theme = ref('')
+
 
 const changeTab = (idx: number): void => {
   currentTab.value = idx
-  if (idx === menuItems.length - 1) {
-    title = 'Настройки'
-  } else {
-    title = store.currentLocationName
-  }
+  isSettingActive.value = idx === menuItems.length - 1
 }
 
 onMounted(async (): Promise<void> => {
   theme.value = getTheme('weatherAppSettings') || getMediaPreference()
   document.documentElement.classList.add(theme.value)
-  title = computed(() => store.currentLocationName)
-  await store.getInitialLocations()
 })
 </script>
 

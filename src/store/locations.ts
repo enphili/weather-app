@@ -36,6 +36,8 @@ export const useLocationsStore = defineStore('locations', () => {
   }
   
   const addNewLocation = (iconCaption: string, coords: [number, number]) => {
+    const initialLocationIndex = locations.value.findIndex(el => el.name === 'Ваше текущее местоположение')
+    if (initialLocationIndex > -1) locations.value.splice(initialLocationIndex, 1)
     const hasLocation = locations.value.map(el => el.name).includes(iconCaption)
     if (!hasLocation && iconCaption) {
       locations.value.forEach(loc => loc.current = false)

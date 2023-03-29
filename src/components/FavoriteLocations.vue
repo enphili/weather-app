@@ -125,7 +125,7 @@ onMounted(async () => {
     let myPlacemark: Placemark
 
     const myMap = new ymaps.Map(map.value, {
-        center: coordinates.value,
+        center: store.currentLocationCoords || coordinates.value,
         controls: ['zoomControl'],
         zoom: 10
       },

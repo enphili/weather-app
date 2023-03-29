@@ -1,7 +1,7 @@
 <template>
   <nav class="weather-app__navbar navbar" :class="{'navbar--shadow': isShadow}">
     <button class="navbar__menu-button menu-button" @click.stop="isMenuActive = true"><span></span></button>
-    <span class="navbar__location-name location-name">{{ header }}</span>
+    <span class="navbar__location-name location-name">{{ isSettingActive ? 'Настройки' : title }}</span>
 
     <Suspense>
       <favorite-locations
@@ -12,15 +12,19 @@
 </template>
 
 <script setup lang="ts">
-import { ref} from 'vue'
+import {computed, ref} from 'vue'
 import FavoriteLocations from './FavoriteLocations.vue'
+import {useLocationsStore} from '../store/locations'
 
 defineProps<{
   isShadow?: boolean,
-  header?: string,
+  isSettingActive: boolean,
 }>()
 
+const store = useLocationsStore()
+
 const isMenuActive = ref<boolean>(false)
+const title = computed(() => store.currentLocationName)
 </script>
 
 <style lang="sass">
