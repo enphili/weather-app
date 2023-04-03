@@ -34,3 +34,4 @@ weatherbackend/.env
 /dist-PWA/
 /dist-notPWA-old/
 /dist/
+dist-PWA/
