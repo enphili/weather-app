@@ -33,5 +33,6 @@ weatherbackend/.env
 .vscode/
 /dist-PWA/
 /dist-notPWA-old/
-/dist/
+dist/
 dist-PWA/
+/dist/
