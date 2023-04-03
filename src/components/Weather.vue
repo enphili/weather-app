@@ -81,7 +81,7 @@ onMounted(async () => {
   isLoader.value = true
   await locStore.getInitialLocations()
   await store.weatherQueryDB(locStore.currentLocationCoords, locStore.currentUnits,false)
-  // await yanStore.yanWeatherQuery(locStore.currentLocationCoords, false)
+  await yanStore.yanWeatherQuery(locStore.currentLocationCoords, false)
   isLoader.value = false
 })
 

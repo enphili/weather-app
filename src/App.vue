@@ -1,5 +1,5 @@
 <template>
-  <div class="weather-app" :style="{ backgroundImage: `url(${backgroundUrl})` }">
+  <div class="weather-app" :style="{ backgroundImage: `url(${image})`}">
     <h1 class="weather-app__title">Приложение погоды</h1>
 
       <Navbar
@@ -35,11 +35,14 @@ import FooterTab from './components/FooterTab.vue'
 import Weather from './components/Weather.vue'
 import Forecast from './components/Forecast.vue'
 import Settings from './components/Settings.vue'
-import backgroundUrl from './assets/img/clear_night.webp'
-import { onMounted, ref } from 'vue'
+import { onMounted, ref} from 'vue'
 import type { Component } from 'vue'
 import {getTheme} from './utils/getfromstorage'
 import {getMediaPreference} from './utils/getMediaPreference'
+import morning from './assets/img/morning.webp'
+import day from './assets/img/day.webp'
+import evening from './assets/img/evening.webp'
+import night from './assets/img/night.webp'
 
 const currentTab = ref<number>(0)
 const menuItems: {component: Component, title: string, svg: string}[] = [
@@ -66,8 +69,24 @@ const menuItems: {component: Component, title: string, svg: string}[] = [
   }
 ]
 const isSettingActive = ref<boolean>(false)
-const theme = ref('')
+const theme = ref<string>('')
+const image = ref<string>('')
 
+const timeNow = new Date().getHours()
+switch (true) {
+  case timeNow >= 6 && timeNow < 11:
+    image.value = morning
+    break
+  case timeNow >= 11 && timeNow < 18:
+    image.value = day
+    break
+  case timeNow >= 18 && timeNow < 23:
+    image.value = evening
+    break
+  case timeNow >= 23 && timeNow < 6:
+    image.value = night
+    break
+}
 
 const changeTab = (idx: number): void => {
   currentTab.value = idx

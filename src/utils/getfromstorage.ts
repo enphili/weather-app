@@ -11,7 +11,6 @@ const getLocationFromNavi = (): Promise<TLocation[]> => new Promise((resolve, re
           resolve(result)
         },
         (error: GeolocationPositionError) => {
-          console.warn(`ERROR(${error.code}): ${error.message}`)
           const result: TLocation[] = [{
             name: 'Москва',
             coords: [55.75417898652652,37.619532149780696],
@@ -20,7 +19,7 @@ const getLocationFromNavi = (): Promise<TLocation[]> => new Promise((resolve, re
           reject(result)
         },
         {
-          enableHighAccuracy: true,
+          enableHighAccuracy: false,
           timeout: 5000,
           maximumAge: 10000,
         }

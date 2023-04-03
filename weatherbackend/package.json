@@ -2,11 +2,11 @@
   "name": "weatherbackend",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "weatherAppBackend.js",
   "type": "module",
   "scripts": {
-    "dev": "nodemon index.js",
-    "start": "node index.js"
+    "dev": "nodemon weatherAppBackend.js",
+    "start": "node weatherAppBackend.js"
   },
   "author": "",
   "license": "ISC",

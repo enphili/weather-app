@@ -50,7 +50,6 @@ import {useLocationsStore} from '../store/locations'
 import {useWeatherStore} from '../store/weather'
 import {useYandexWeatherStore} from '../store/yanweather'
 import { loadYmap } from 'vue-yandex-maps'
-import {Placemark} from 'yandex-maps'
 import { useNotification } from '@kyvg/vue3-notification'
 import {useTempsStore} from '../store/favoritelocationstemp'
 import {useForecastStore} from '../store/forecast'
@@ -122,7 +121,7 @@ onMounted(async () => {
   await loadYmap(mapSetting)
   await ymaps.ready(() => {
     if (!map.value) return
-    let myPlacemark: Placemark
+    let myPlacemark: any
 
     const myMap = new ymaps.Map(map.value, {
         center: store.currentLocationCoords || coordinates.value,

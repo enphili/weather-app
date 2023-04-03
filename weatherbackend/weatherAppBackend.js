@@ -10,6 +10,7 @@ import singletempandicon from './routes/singletempandicon.js'
 
 dotenv.config()
 const PORT = process.env.PORT ?? 3000
+const HOSTNAME = 'localhost'
 const app = express()
 const limit = RateLimit({
   windowMs: 6000,
@@ -27,6 +28,8 @@ app.use(singletempandicon)
 
 app.use((err, req, res, _) => handleError(err, res))
 
-app.listen(PORT, () => {
-  console.log(`⚡️ Server has been started at http://localhost:${PORT}... ⚡️`)
+app.listen(PORT, HOSTNAME, err => {
+  err
+    ? console.log(`Unexpected occurred error:  ${err}`)
+    : console.log(`⚡️ Server has been started at http://${HOSTNAME}:${PORT}... ⚡️`)
 })

@@ -8,7 +8,7 @@ pnpm-debug.log*
 lerna-debug.log*
 
 node_modules
-dist
+dist-notPWA-old
 dist-ssr
 *.local
 
@@ -31,3 +31,6 @@ backend/.env
 \!!!backend/
 weatherbackend/.env
 .vscode/
+/dist-PWA/
+/dist-notPWA-old/
+/dist/
