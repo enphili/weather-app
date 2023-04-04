@@ -3,7 +3,7 @@
     <loader v-if="isLoader"></loader>
   </transition>
 
-  <notifications position="top center" width="222px" classes="weather-notif" />
+  <notifications position="top center" width="222px" />
 
   <div :class="[{'collapse-menu--active': menuActive}, 'navbar__collapse-menu', 'collapse-menu']">
 
@@ -186,18 +186,3 @@ onMounted(async () => {
 })
 
 </script>
-
-<style lang="sass">
-.weather-notif
-  margin: 0 5px 5px
-  padding: 10px
-  font-size: 12px
-  background-color: #12121FFF
-  color: #fff
-  border-left: 5px solid var(--accent-color)
-  .notification-title
-    font-size: 13px
-    margin-bottom: 10px
-  .notification-content
-    line-height: 16px
-</style>

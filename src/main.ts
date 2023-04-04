@@ -14,7 +14,7 @@ window.addEventListener('resize', () => {
 
 const baseURL = () => {
   if (import.meta.env.DEV) return `http://localhost:3000`
-  if (import.meta.env.PROD) return 'https://weatherapp.webfldev.ru'
+  if (import.meta.env.PROD) return 'https://weather.webfldev.ru'
 }
 
 axios.defaults.baseURL = baseURL()

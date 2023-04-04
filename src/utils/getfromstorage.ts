@@ -1,35 +1,49 @@
 import {TLocation} from '../types/appTypes'
+import { useNotification  } from '@kyvg/vue3-notification'
+const { notify}  = useNotification()
+
+const defaultResult: TLocation[] = [{
+  name: 'Москва',
+  coords: [55.75417898652652,37.619532149780696],
+  current: true
+}]
 
 const getLocationFromNavi = (): Promise<TLocation[]> => new Promise((resolve, reject) => {
-      navigator.geolocation.getCurrentPosition(
-        (position: GeolocationPosition) => {
-          const result: TLocation[] = [{
-            name: 'Ваше текущее местоположение',
-            coords: [position.coords.latitude, position.coords.longitude],
-            current: true
-          }]
-          resolve(result)
-        },
-        (error: GeolocationPositionError) => {
-          const result: TLocation[] = [{
-            name: 'Москва',
-            coords: [55.75417898652652,37.619532149780696],
-            current: true
-          }]
-          reject(result)
-        },
-        {
-          enableHighAccuracy: false,
-          timeout: 5000,
-          maximumAge: 10000,
-        }
-      )
-  })
+  if (!navigator.geolocation) return defaultResult
+  navigator.geolocation.getCurrentPosition(
+    (position: GeolocationPosition) => {
+      const result: TLocation[] = [{
+        name: 'Ваше текущее местоположение',
+        coords: [position.coords.latitude, position.coords.longitude],
+        current: true
+      }]
+      resolve(result)
+    },
+    (error: GeolocationPositionError) => {
+      reject(error)
+    },
+    {
+      enableHighAccuracy: true,
+      timeout: 5000,
+      maximumAge: 10000
+    }
+  )
+})
 
 export const getFromStorage = async (key: string): Promise<TLocation[]> => {
-  const item = localStorage.getItem(key)
-  if (item) return JSON.parse(item)
-  else return await getLocationFromNavi()
+  try {
+    const item = localStorage.getItem(key)
+    if (item) return JSON.parse(item)
+    else return await getLocationFromNavi()
+  }
+  catch (e) {
+    const errorText = e instanceof GeolocationPositionError ? e.message : undefined
+    notify({
+      title: 'Ошибка!',
+      text: errorText
+    })
+    return defaultResult
+  }
 }
 
 export const setToStorage = (key: string, arr: TLocation[]) => {

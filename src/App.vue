@@ -80,10 +80,10 @@ switch (true) {
   case timeNow >= 11 && timeNow < 18:
     image.value = day
     break
-  case timeNow >= 18 && timeNow < 23:
+  case timeNow >= 18 && timeNow <= 23:
     image.value = evening
     break
-  case timeNow >= 23 && timeNow < 6:
+  case timeNow >= 0 && timeNow < 6:
     image.value = night
     break
 }
@@ -122,6 +122,18 @@ onMounted(async (): Promise<void> => {
   width: 100%
   &--shadow
     box-shadow: var(--nav-shadow)
+.vue-notification
+  margin: 0 5px 5px
+  padding: 10px
+  font-size: 12px
+  color: #ffffff
+  background: #12121FFF !important
+  border-left: 5px solid var(--accent-color) !important
+  .notification-title
+    font-size: 13px
+    margin-bottom: 10px
+  .notification-content
+    line-height: 16px
 @media only screen and (min-width: 768px)
   .weather-app
     max-width: 480px
