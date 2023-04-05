@@ -106,23 +106,26 @@ const title = computed(() => store.currentLocationName)
   background-color: var(--nav-gbc)
   transition: var(--transition)
 .collapse-close, .add-location-btn
-  display: block
-  width: 56px
-  height: 56px
-  border: none
-  cursor: pointer
-.collapse-close
-  font-size: 20px
-  color: var(--wa-color)
-  background-color: var(--nav-gbc)
-  transition: var(--transition)
-.add-location-btn
   display: flex
   justify-content: center
   align-items: center
+  width: 56px
+  height: 56px
+  border: none
+  -webkit-appearance: none
+  -moz-appearance: none
+  appearance: none
+  cursor: pointer
+.collapse-close
+  text-decoration: none !important
+  background-color: var(--nav-gbc)
+  transition: var(--transition)
+  & img
+    height: 20px
+    width: 20px
+.add-location-btn
   border-radius: 50%
   padding: 0
-  color: var(--wa-color)
   background-color: var(--accent-color)
   box-shadow: 0 6px 6px rgba(0,0,0,0.24)
   transition: var(--transition)

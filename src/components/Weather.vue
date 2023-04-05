@@ -3,7 +3,7 @@
     <loader v-if="isLoader"></loader>
   </transition>
 
-  <div class="weather-app__main-content main-content">
+  <div class="weather-app__main-content main-content weather-content">
     <div class="main-content__present-weather present-weather">
       <div class="main-content__temperature-wrapper temperature-wrapper">
         <span class="main-content__today-temperature today-temperature">{{ temp }}&deg;</span>
@@ -93,8 +93,8 @@ onMounted(async () => {
   opacity: 0
 .weather-app
   &__main-content
-    margin-top: 56px
-    margin-bottom: 59px
+    padding-top: 56px
+    padding-bottom: 59px
 .main-content
   display: flex
   flex-direction: column
@@ -109,6 +109,8 @@ onMounted(async () => {
     margin-top: 5px
   &__weather-parameters
     flex: 0 1 auto
+.weather-content
+  touch-action: none
 .present-weather
   display: flex
   flex-direction: column

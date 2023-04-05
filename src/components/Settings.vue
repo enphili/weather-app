@@ -46,8 +46,8 @@
             v-for="unit in unitsData"
             :key="unit.value"
           >
-            {{ unit.title }} ({{ unit.si }})
-          </span>
+          {{ unit.title }} ({{ unit.si }})
+        </span>
         </div>
         <div class="setting-point__action-button action-button mr17 action-button--radio">
           <label
@@ -68,7 +68,6 @@
       </div>
 
       <div class="main-content__setting-point setting-point">
-
         <div class="setting-point__description description">
           <span class="setting-point__setting-name setting-name">Избранные локаций</span>
           <span class="setting-point__setting-description setting-description">Максимальное количество локаций которые можно добавить в избранное</span>
@@ -82,7 +81,6 @@
             :selected-item="locationsStore.selectCurrentItem"
           ></vue-select>
         </div>
-
       </div>
 
       <div class="main-content__setting-point setting-point">
@@ -200,7 +198,7 @@ const darkMode = computed({
   border-radius: 10px
   background-color: var(--accent-color)
   font-size: 10px
-  color: var(--wa-color)
+  color: #fff
   transition: var(--transition)
   &-wrap
     position: relative

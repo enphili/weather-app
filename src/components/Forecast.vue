@@ -121,10 +121,21 @@ onMounted(async () => {
 <style lang="sass">
 .main-content
   &--fill-white
-    padding: 46px 16px
+    padding-top: 102px
+    padding-left: 16px
+    padding-right: 16px
     background-color: var(--content-bgc)
     color: var(--content-txt-color)
     transition: var(--transition)
+    &:before
+      content: ''
+      position: fixed
+      top: 0
+      right: 0
+      left: 0
+      bottom: 0
+      background-color: var(--content-bgc)
+      z-index: -1
   &__hourly-forecast
     margin-top: 24px
     margin-bottom: 48px

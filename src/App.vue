@@ -106,31 +106,40 @@ onMounted(async (): Promise<void> => {
   flex-direction: column
   min-height: 100vh
   min-height: var(--vh)
-  background-position: center
-  background-size: cover
-  background-color: #383838
   font-family: "Roboto", sans-serif
   font-size: 14px
-  color: var(--wa-color)
+  color: #fff
+  &:before
+    content: ''
+    position: fixed
+    left: 0
+    right: 0
+    top: 0
+    bottom: 0
+    background-position: center
+    background-size: cover
+    background-color: #383838
+    background-attachment: fixed
+    z-index: -1
 .weather-app__title
   display: none
 .no-webp
-  & .wa-bg-morning
+  & .wa-bg-morning:before
     background-image: url("/morning.jpg")
-  & .wa-bg-day
+  & .wa-bg-day:before
     background-image: url("/day.jpg")
-  & .wa-bg-evening
+  & .wa-bg-evening:before
     background-image: url("/evening.jpg")
-  & .wa-bg-night
+  & .wa-bg-night:before
     background-image: url("/night.jpg")
 .webp
-  & .wa-bg-morning
+  & .wa-bg-morning:before
     background-image: url("/morning.webp")
-  & .wa-bg-day
+  & .wa-bg-day:before
     background-image: url("/day.webp")
-  & .wa-bg-evening
+  & .wa-bg-evening:before
     background-image: url("/evening.webp")
-  & .wa-bg-night
+  & .wa-bg-night:before
     background-image: url("/night.webp")
 .footer-nav
   position: fixed
@@ -153,7 +162,7 @@ onMounted(async (): Promise<void> => {
   .notification-content
     line-height: 16px
 @media only screen and (min-width: 768px)
-  .weather-app
+  .weather-app, .weather-app:before, .main-content--fill-white:before
     max-width: 480px
     margin: auto
   .footer-nav

@@ -9,7 +9,9 @@
 
     <div class="navbar__collapse-header collapse-header">
       <span class="navbar__collapse-title collapse-title">Избранные локации</span>
-      <button class="navbar__collapse-close collapse-close" @click.stop="$emit('update:menuActive', false)">&#10006;</button>
+      <button class="navbar__collapse-close collapse-close" @click.stop="$emit('update:menuActive', false)">
+        <img src="/close_icon.svg" alt="close_icon">
+      </button>
     </div>
 
     <div class="navbar__favorite-locations favorite-locations">
@@ -34,7 +36,9 @@
     <div class="navbar__collapse-menu collapse-menu mapping" :class="{'collapse-menu--active': showMap}">
       <div class="navbar__collapse-header collapse-header">
         <span class="navbar__collapse-title collapse-title">Выбор местоположения</span>
-        <button class="navbar__collapse-close collapse-close" @click="addLocation">&#10006;</button>
+        <button class="navbar__collapse-close collapse-close" @click="addLocation">
+          <img src="/close_icon.svg" alt="close_icon">
+        </button>
       </div>
       <div id="map" ref="map" class="yandex-container"></div>
     </div>
