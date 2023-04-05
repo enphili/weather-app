@@ -23,6 +23,7 @@ defineProps<{
     flex-direction: column
     justify-content: space-between
     align-items: center
+    margin: 0
     padding: 9px 0
     border: none
     font-size: 12px

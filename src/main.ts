@@ -7,6 +7,7 @@ import { select } from './plugins/vue-select/select'
 import Notifications from '@kyvg/vue3-notification'
 import './assets/css/reset.css'
 import './assets/css/weather-icons.min.css'
+import './utils/modernizr-custom.js'
 
 window.addEventListener('resize', () => {
   document.documentElement.style.setProperty('--vh', `${window.innerHeight}px`)

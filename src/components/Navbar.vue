@@ -41,7 +41,10 @@ const title = computed(() => store.currentLocationName)
     margin-left: 12px
   &__collapse-menu
     position: fixed
-    inset: 0
+    top: 0
+    right: 0
+    bottom: 0
+    left: 0
   &__add-location-btn
     position: absolute
     bottom: 16px
@@ -50,6 +53,8 @@ const title = computed(() => store.currentLocationName)
     background-color: var(--nav-gbc)
     box-shadow: var(--nav-shadow)
     transition: var(--transition)
+  &__menu-button
+    margin: 0
 .menu-button
   display: inline-block
   align-items: center
@@ -112,14 +117,18 @@ const title = computed(() => store.currentLocationName)
   background-color: var(--nav-gbc)
   transition: var(--transition)
 .add-location-btn
+  display: flex
+  justify-content: center
+  align-items: center
   border-radius: 50%
   padding: 0
-  line-height: 56px
-  font-size: 32px
   color: var(--wa-color)
   background-color: var(--accent-color)
   box-shadow: 0 6px 6px rgba(0,0,0,0.24)
   transition: var(--transition)
+  & img
+    width: 32px
+    height: 32px
 .single-location
   display: flex
   align-items: center

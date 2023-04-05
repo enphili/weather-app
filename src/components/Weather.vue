@@ -10,23 +10,23 @@
         <i class="wi main-weather-icon" :class="iconCode"></i>
       </div>
       <p class="main-content__weather-text weather-text">{{ weatherDescription }}</p>
-      <p v-if="feelsLike" class="main-content__feels-like feels-like">Ощущается как: {{ feelsLike }}&deg;</p>
+      <p v-if="Number.isInteger(feelsLike)" class="main-content__feels-like feels-like">Ощущается как: {{ feelsLike }}&deg;</p>
     </div>
     <div class="main-content__weather-parameters weather-parameters">
       <div class="weather-parameters__extended-data extended-data">
         <i class="wi wi-barometer weather-parameters__extended-icon extended-icon"></i>
         <span class="extended-data__value">{{ pressure }}</span>
-        <span v-if="pressure" class="extended-data__units">{{ whatIsUnitPressure }}</span>
+        <span v-if="pressure >= 0" class="extended-data__units">{{ whatIsUnitPressure }}</span>
       </div>
       <div class="weather-parameters__extended-data extended-data">
         <i class="wi wi-humidity weather-parameters__extended-icon extended-icon"></i>
         <span class="extended-data__value">{{ humidity }}</span>
-        <span v-if="humidity" class="extended-data__units">%</span>
+        <span v-if="humidity >= 0" class="extended-data__units">%</span>
       </div>
       <div class="weather-parameters__extended-data extended-data">
         <i class="wi wi-strong-wind weather-parameters__extended-icon extended-icon"></i>
         <span class="extended-data__value">{{ windSpeed }}</span>
-        <span v-if="windSpeed" class="extended-data__units">{{ whatIsUnitWindSpeed }} ({{ windDeg }})</span>
+        <span v-if="windSpeed >= 0" class="extended-data__units">{{ whatIsUnitWindSpeed }} ({{ windDeg }})</span>
       </div>
       <div class="weather-parameters__parameters-text">
         <i class="wi wi-sunrise">: {{ sunrise }}</i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="wi wi-sunset">: {{ sunset }}</i>
@@ -75,7 +75,6 @@ const windDeg = computed(() => {
 const iconCode = computed(() => weather.value?.weather?.[0]?.id ? 'wi-owm-'+ weather.value?.weather?.[0]?.id : 'wi-na')
 const sunrise = computed(() => yanWeather.value?.forecast?.sunrise ?? 'н/д')
 const sunset = computed(() => yanWeather.value?.forecast?.sunset ?? 'н/д')
-
 
 onMounted(async () => {
   isLoader.value = true

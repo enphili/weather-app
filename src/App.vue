@@ -1,5 +1,8 @@
 <template>
-  <div class="weather-app" :style="{ backgroundImage: `url(${image})`}">
+  <div
+    class="weather-app"
+    :class="image"
+  >
     <h1 class="weather-app__title">Приложение погоды</h1>
 
       <Navbar
@@ -39,10 +42,6 @@ import { onMounted, ref} from 'vue'
 import type { Component } from 'vue'
 import {getTheme} from './utils/getfromstorage'
 import {getMediaPreference} from './utils/getMediaPreference'
-import morning from './assets/img/morning.webp'
-import day from './assets/img/day.webp'
-import evening from './assets/img/evening.webp'
-import night from './assets/img/night.webp'
 
 const currentTab = ref<number>(0)
 const menuItems: {component: Component, title: string, svg: string}[] = [
@@ -73,18 +72,19 @@ const theme = ref<string>('')
 const image = ref<string>('')
 
 const timeNow = new Date().getHours()
+
 switch (true) {
   case timeNow >= 6 && timeNow < 11:
-    image.value = morning
+    image.value = 'wa-bg-morning'
     break
   case timeNow >= 11 && timeNow < 18:
-    image.value = day
+    image.value = 'wa-bg-day'
     break
   case timeNow >= 18 && timeNow <= 23:
-    image.value = evening
+    image.value = 'wa-bg-evening'
     break
   case timeNow >= 0 && timeNow < 6:
-    image.value = night
+    image.value = 'wa-bg-night'
     break
 }
 
@@ -114,6 +114,24 @@ onMounted(async (): Promise<void> => {
   color: var(--wa-color)
 .weather-app__title
   display: none
+.no-webp
+  & .wa-bg-morning
+    background-image: url("/morning.jpg")
+  & .wa-bg-day
+    background-image: url("/day.jpg")
+  & .wa-bg-evening
+    background-image: url("/evening.jpg")
+  & .wa-bg-night
+    background-image: url("/night.jpg")
+.webp
+  & .wa-bg-morning
+    background-image: url("/morning.webp")
+  & .wa-bg-day
+    background-image: url("/day.webp")
+  & .wa-bg-evening
+    background-image: url("/evening.webp")
+  & .wa-bg-night
+    background-image: url("/night.webp")
 .footer-nav
   position: fixed
   bottom: 0
@@ -141,3 +159,4 @@ onMounted(async (): Promise<void> => {
   .footer-nav
     max-width: 480px
 </style>
+

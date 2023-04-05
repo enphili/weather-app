@@ -229,7 +229,10 @@ const darkMode = computed({
   display: none
 .slider
   position: absolute
-  inset: 0
+  top: 0
+  right: 0
+  bottom: 0
+  left: 0
   height: 15px
   background-color: var(--switch-bgc)
   cursor: pointer
@@ -263,14 +266,24 @@ input:checked + .slider:before
 label input[type="radio"]
   display: none
 .design
+  position: relative
   width: 8px
   height: 8px
   border-radius: 50%
-  outline-offset: 4px
-  outline: 3px solid var(--switch-bgc)
   margin-bottom: 10px
+  &:before
+    content: ''
+    position: absolute
+    top: -7px
+    right: -7px
+    bottom: -7px
+    left: -7px
+    border: 3px solid var(--switch-bgc)
+    border-radius: 50%
 label input[type="radio"]:checked~.design
-  outline-color: var(--sinput-checked-bgc)
   background: var(--accent-color)
+  transition: var(--transition)
+label input[type="radio"]:checked~.design:before
+  border: 3px solid var(--sinput-checked-bgc)
   transition: var(--transition)
 </style>

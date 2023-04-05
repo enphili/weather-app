@@ -39,7 +39,9 @@
       <div id="map" ref="map" class="yandex-container"></div>
     </div>
 
-    <button class="navbar__add-location-btn add-location-btn" @click="showMap = true">+</button>
+    <button class="navbar__add-location-btn add-location-btn" @click="showMap = true">
+      <img src="/plus.svg" alt="plus icon">
+    </button>
   </div>
 </template>
 
