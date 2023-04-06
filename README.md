@@ -18,7 +18,7 @@
 
 ## Installation
 
-Clone или fork репозитория
+Clone или fork репозиторий
 
 ```sh
 cd weather-app
@@ -31,7 +31,7 @@ npm i
 npm run dev
 ```
 
-собрать приложение SPA
+собрать приложение
 
 ```sh
 npm run build
